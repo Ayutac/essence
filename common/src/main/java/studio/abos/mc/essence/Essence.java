@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import studio.abos.mc.essence.api.EssenceApi;
 import studio.abos.mc.essence.block.ModBlocks;
+import studio.abos.mc.essence.attachment.ModDataAttachments;
 import studio.abos.mc.essence.entity.ModEntities;
 import studio.abos.mc.essence.item.ModItems;
 
@@ -31,6 +32,7 @@ public class Essence {
         registrars.items(ModItems::initialize);
         registrars.entityTypes(ModEntities::initialize);
         registrars.creativeModeTabs(ModItems::initialize);
+        registrars.dataAttachmentTypes(ModDataAttachments::initialize);
     }
 
 }
