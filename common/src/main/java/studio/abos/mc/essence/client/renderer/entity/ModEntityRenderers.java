@@ -1,0 +1,12 @@
+package studio.abos.mc.essence.client.renderer.entity;
+
+import net.blay09.mods.balm.client.renderer.entity.BalmEntityRendererRegistrar;
+import studio.abos.mc.essence.entity.ModEntities;
+
+public class ModEntityRenderers {
+
+    public static void initialize(final BalmEntityRendererRegistrar renderers) {
+        renderers.register(ModEntities.ESSENCE_BALL, EssenceBallRenderer::new);
+    }
+
+}
