@@ -25,7 +25,7 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity {
     public void tick() {
         super.tick();
         final LivingEntity owner = getOwner();
-        if (owner != null && owner.isDeadOrDying()) {
+        if (owner != null && (owner.isDeadOrDying() || owner.distanceToSqr(this) >= 64 * 64)) {
             discard();
             return;
         }
