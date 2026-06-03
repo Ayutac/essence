@@ -8,11 +8,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TraceableEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public abstract class EssenceEntity extends Entity {
+public abstract class EssenceEntity extends Entity implements TraceableEntity {
 
     private EntityReference<@NonNull Entity> owner;
 
