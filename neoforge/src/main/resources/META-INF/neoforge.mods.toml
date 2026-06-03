@@ -12,9 +12,9 @@ credits="${credits}"
 authors="${mod_author}"
 description='''${description}'''
 [[mixins]]
-config = "${mod_id}.mixins.json"
+config = "essence.mixins.json"
 [[mixins]]
-config = "${mod_id}.neoforge.mixins.json"
+config = "essence.neoforge.mixins.json"
 [[dependencies.${mod_id}]]
 modId="neoforge"
 type="required"
