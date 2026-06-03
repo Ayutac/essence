@@ -5,13 +5,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import studio.abos.mc.essence.YourMod;
+import studio.abos.mc.essence.Essence;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
 
     @Inject(at = @At("TAIL"), method = "<init>")
     private void init(CallbackInfo info) {
-        YourMod.logger.info("Hello from " + YourMod.MOD_ID);
+        Essence.logger.info("Hello from " + Essence.MOD_ID);
     }
 }

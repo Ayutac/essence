@@ -6,8 +6,8 @@ import net.blay09.mods.balm.platform.config.reflection.NestedType;
 
 import java.util.List;
 
-@Config(YourMod.MOD_ID)
-public class YourModConfig {
+@Config(Essence.MOD_ID)
+public class EssenceConfig {
 
     @Comment("This is an example int property")
     public int exampleInt = 1234;

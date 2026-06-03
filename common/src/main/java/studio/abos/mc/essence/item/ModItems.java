@@ -5,9 +5,9 @@ import net.blay09.mods.balm.world.item.BalmItemRegistrar;
 import net.blay09.mods.balm.world.item.DeferredItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
-import studio.abos.mc.essence.YourMod;
+import studio.abos.mc.essence.Essence;
 
-import static studio.abos.mc.essence.YourMod.id;
+import static studio.abos.mc.essence.Essence.id;
 
 public class ModItems {
     public static DeferredItem yourItem;
@@ -17,8 +17,8 @@ public class ModItems {
     }
 
     public static void initialize(BalmCreativeModeTabRegistrar creativeModeTabs) {
-        creativeModeTabs.register(YourMod.MOD_ID, builder ->
-                builder.title(Component.translatable(id(YourMod.MOD_ID).toLanguageKey("itemGroup")))
+        creativeModeTabs.register(Essence.MOD_ID, builder ->
+                builder.title(Component.translatable(id(Essence.MOD_ID).toLanguageKey("itemGroup")))
                         .icon(() -> ModItems.yourItem.createStack())
                         .displayItems((displayParameters, output) -> {
                             output.accept(ModItems.yourItem);

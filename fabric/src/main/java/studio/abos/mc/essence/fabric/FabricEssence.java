@@ -3,11 +3,11 @@ package studio.abos.mc.essence.fabric;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.fabric.platform.runtime.FabricLoadContext;
 import net.fabricmc.api.ModInitializer;
-import studio.abos.mc.essence.YourMod;
+import studio.abos.mc.essence.Essence;
 
-public class FabricYourMod implements ModInitializer {
+public class FabricEssence implements ModInitializer {
     @Override
     public void onInitialize() {
-        Balm.initializeMod(YourMod.MOD_ID, FabricLoadContext.INSTANCE, YourMod::initialize);
+        Balm.initializeMod(Essence.MOD_ID, FabricLoadContext.INSTANCE, Essence::initialize);
     }
 }

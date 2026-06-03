@@ -20,10 +20,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "studio.abos.mc.essence.fabric.FabricYourMod"
+      "studio.abos.mc.essence.fabric.FabricEssence"
     ],
     "client": [
-      "studio.abos.mc.essence.fabric.client.FabricYourModClient"
+      "studio.abos.mc.essence.fabric.client.FabricEssenceClient"
     ],
     "fabric-datagen": [
       "studio.abos.mc.essence.fabric.datagen.ModDataGenerator"

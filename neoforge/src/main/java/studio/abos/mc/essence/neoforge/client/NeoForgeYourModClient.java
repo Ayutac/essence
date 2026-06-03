@@ -6,14 +6,14 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import studio.abos.mc.essence.YourMod;
+import studio.abos.mc.essence.Essence;
 import studio.abos.mc.essence.client.YourModClient;
 
-@Mod(value = YourMod.MOD_ID, dist = Dist.CLIENT)
+@Mod(value = Essence.MOD_ID, dist = Dist.CLIENT)
 public class NeoForgeYourModClient {
 
     public NeoForgeYourModClient(ModContainer modContainer, IEventBus modEventBus) {
         final var context = new NeoForgeLoadContext(modContainer, modEventBus);
-        BalmClient.initializeMod(YourMod.MOD_ID, context, YourModClient::initialize);
+        BalmClient.initializeMod(Essence.MOD_ID, context, YourModClient::initialize);
     }
 }

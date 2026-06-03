@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import studio.abos.mc.essence.block.ModBlocks;
 import studio.abos.mc.essence.item.ModItems;
 
-public class YourMod {
+public class Essence {
 
-    public static final Logger logger = LoggerFactory.getLogger(YourMod.class);
+    public static final Logger logger = LoggerFactory.getLogger(Essence.class);
 
     public static final String MOD_ID = "abosessence";
 
@@ -18,12 +18,12 @@ public class YourMod {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 
-    public static YourModConfig config() {
-        return Balm.config().getActiveConfig(YourModConfig.class);
+    public static EssenceConfig config() {
+        return Balm.config().getActiveConfig(EssenceConfig.class);
     }
 
     public static void initialize(BalmRegistrars registrars) {
-        Balm.config().registerConfig(YourModConfig.class);
+        Balm.config().registerConfig(EssenceConfig.class);
 
         registrars.blocks(ModBlocks::initialize);
         registrars.items(ModItems::initialize);

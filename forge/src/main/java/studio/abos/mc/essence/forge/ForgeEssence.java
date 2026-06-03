@@ -6,17 +6,17 @@ import net.blay09.mods.balm.forge.platform.runtime.ForgeLoadContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import studio.abos.mc.essence.YourMod;
+import studio.abos.mc.essence.Essence;
 import studio.abos.mc.essence.client.YourModClient;
 
-@Mod(YourMod.MOD_ID)
-public class ForgeYourMod {
+@Mod(Essence.MOD_ID)
+public class ForgeEssence {
 
-    public ForgeYourMod(FMLJavaModLoadingContext context) {
+    public ForgeEssence(FMLJavaModLoadingContext context) {
         final var loadContext = new ForgeLoadContext(context.getModBusGroup());
-        Balm.initializeMod(YourMod.MOD_ID, loadContext, YourMod::initialize);
+        Balm.initializeMod(Essence.MOD_ID, loadContext, Essence::initialize);
         if (FMLEnvironment.dist.isClient()) {
-            BalmClient.initializeMod(YourMod.MOD_ID, loadContext, YourModClient::initialize);
+            BalmClient.initializeMod(Essence.MOD_ID, loadContext, YourModClient::initialize);
         }
     }
 

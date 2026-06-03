@@ -7,7 +7,7 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.item.Items;
-import studio.abos.mc.essence.YourMod;
+import studio.abos.mc.essence.Essence;
 import studio.abos.mc.essence.block.ModBlocks;
 import studio.abos.mc.essence.item.ModItems;
 
@@ -43,6 +43,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 
     @Override
     public String getName() {
-        return YourMod.MOD_ID;
+        return Essence.MOD_ID;
     }
 }
