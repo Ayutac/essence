@@ -12,11 +12,11 @@ import java.util.function.Function;
 
 public class ModEntities {
 
-    public static Holder<@NotNull EntityType<@NotNull EssenceBall>> ESSENCE_BALL;
+    public static Holder<@NotNull EntityType<@NotNull EssenceBallEntity>> ESSENCE_BALL;
 
     public static void initialize(BalmEntityTypeRegistrar entities) {
         ESSENCE_BALL = entities.register("essence_ball", () ->
-                EntityType.Builder.of(new WorldOnlyEntityFactory<>(EssenceBall::new), MobCategory.MISC)
+                EntityType.Builder.of(new WorldOnlyEntityFactory<>(EssenceBallEntity::new), MobCategory.MISC)
                         .sized(0.5f, 0.5f)
                         .eyeHeight(0.25f)).asHolder();
     }

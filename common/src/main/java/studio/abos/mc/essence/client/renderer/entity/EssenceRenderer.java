@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import studio.abos.mc.essence.client.renderer.entity.state.EssenceRenderState;
 import studio.abos.mc.essence.entity.EssenceEntity;
 
-public abstract class EssenceEntityRenderer<T extends EssenceEntity, S extends EssenceRenderState> extends EntityRenderer<@NotNull T, @NotNull S> {
-    protected EssenceEntityRenderer(final EntityRendererProvider.Context context) {
+public abstract class EssenceRenderer<T extends EssenceEntity, S extends EssenceRenderState> extends EntityRenderer<@NotNull T, @NotNull S> {
+    protected EssenceRenderer(final EntityRendererProvider.Context context) {
         super(context);
     }
 }
