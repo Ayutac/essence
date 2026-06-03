@@ -20,18 +20,18 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "yourname.mods.yourmod.fabric.FabricYourMod"
+      "studio.abos.mc.essence.fabric.FabricYourMod"
     ],
     "client": [
-      "yourname.mods.yourmod.fabric.client.FabricYourModClient"
+      "studio.abos.mc.essence.fabric.client.FabricYourModClient"
     ],
     "fabric-datagen": [
-      "yourname.mods.yourmod.fabric.datagen.ModDataGenerator"
+      "studio.abos.mc.essence.fabric.datagen.ModDataGenerator"
     ]
   },
   "mixins": [
-    "yourmod.mixins.json",
-    "yourmod.fabric.mixins.json"
+    "essence.mixins.json",
+    "essence.fabric.mixins.json"
   ],
   "depends": {
     "java": ">=${java_version}",
