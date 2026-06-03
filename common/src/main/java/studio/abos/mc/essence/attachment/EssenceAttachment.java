@@ -25,7 +25,8 @@ public class EssenceAttachment {
             Codec.FLOAT.fieldOf("purple").forGetter(EssenceAttachment::getPurple),
             Codec.FLOAT.fieldOf("green").forGetter(EssenceAttachment::getGreen),
             Codec.FLOAT.fieldOf("orange").forGetter(EssenceAttachment::getOrange),
-            Codec.FLOAT.fieldOf("willpower").forGetter(EssenceAttachment::getWillpower)
+            Codec.FLOAT.fieldOf("willpower").forGetter(EssenceAttachment::getWillpower),
+            Codec.FLOAT.fieldOf("willpowerBonus").forGetter(EssenceAttachment::getWillpowerBonus)
     ).apply(instance, EssenceAttachment::new));
 
     private float blue;
@@ -36,13 +37,18 @@ public class EssenceAttachment {
     private float orange;
 
     private float willpower;
+    private float willpowerBonus;
 
     public float getImagination() {
         return blue + red + yellow + purple + green + orange;
     }
 
     public static EssenceAttachment of(@NonNull LivingEntity living) {
-        return ModDataAttachments.ESSENCE.getOrCreate(living);
+        final EssenceAttachment essence = ModDataAttachments.ESSENCE.getOrCreate(living);
+        if (living instanceof ServerPlayer player) {
+            essence.setWillpower(calculateWillpower(player) + essence.getWillpowerBonus());
+        }
+        return essence;
     }
 
     public static float calculateWillpower(ServerPlayer player) {
