@@ -5,6 +5,7 @@ plugins {
     alias libs.plugins.modDevGradle
     alias libs.plugins.curseForgeGradle
     alias libs.plugins.modrinthMinotaur
+    id("io.freefair.lombok") version "9.5.0"
 }
 
 neoForge {
