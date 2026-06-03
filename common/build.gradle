@@ -1,6 +1,7 @@
 plugins {
     id 'multiloader-common'
     alias libs.plugins.modDevGradle
+    id("io.freefair.lombok") version "9.5.0"
 }
 
 neoForge {
