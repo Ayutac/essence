@@ -5,7 +5,7 @@ minecraft = "26.1.2"
 # See https://projects.neoforged.net/neoforged/neoform
 neoForm = "26.1.2-1"
 # See https://projects.neoforged.net/neoforged/neoforge
-neoForge = "26.1.2.0-beta"
+neoForge = "26.1.2.21-beta"
 # See https://files.minecraftforge.net
 forge = "64.0.0"
 # See https://fabricmc.net/develop/
