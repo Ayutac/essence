@@ -1,5 +1,6 @@
 package studio.abos.mc.essence.entity;
 
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 public class EssenceBallEntity extends EssenceEntity {
@@ -10,6 +11,16 @@ public class EssenceBallEntity extends EssenceEntity {
 
     @Override
     protected void tickPhysics() {
+    }
 
+    public static void summonAndShoot(final LivingEntity user) {
+        if (user == null) {
+            return;
+        }
+        final Level level = user.level();
+        final EssenceBallEntity ball = new EssenceBallEntity(level);
+        ball.setOwner(user);
+        ball.setPos(user.getEyePosition());
+        level.addFreshEntity(ball);
     }
 }

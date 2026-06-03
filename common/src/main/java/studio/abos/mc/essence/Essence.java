@@ -9,6 +9,7 @@ import studio.abos.mc.essence.api.EssenceApi;
 import studio.abos.mc.essence.block.ModBlocks;
 import studio.abos.mc.essence.attachment.ModDataAttachments;
 import studio.abos.mc.essence.command.EssenceInfoCommand;
+import studio.abos.mc.essence.command.EssenceMoveCommand;
 import studio.abos.mc.essence.command.EssenceSetCommand;
 import studio.abos.mc.essence.entity.ModEntities;
 import studio.abos.mc.essence.item.ModItems;
@@ -37,6 +38,7 @@ public class Essence {
         registrars.dataAttachmentTypes(ModDataAttachments::initialize);
         Balm.commands().register(EssenceInfoCommand::register);
         Balm.commands().register(EssenceSetCommand::register);
+        Balm.commands().register(EssenceMoveCommand::register);
     }
 
 }
