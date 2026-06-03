@@ -42,6 +42,15 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity {
         return (LivingEntity)EntityReference.getEntity(owner, level());
     }
 
+    public boolean canHitEntity(final Entity entity) {
+        if (entity == null || !entity.canBeHitByProjectile()) {
+            return false;
+        } else {
+            Entity owner = this.getOwner();
+            return owner == null || owner != entity;
+        }
+    }
+
     @Override
     public boolean hurtServer(final @NonNull ServerLevel serverLevel, final @NonNull DamageSource damageSource, final float v) {
         return false;

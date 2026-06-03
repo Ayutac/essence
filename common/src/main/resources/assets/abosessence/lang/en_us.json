@@ -1,0 +1,6 @@
+{
+  "death.attack.essence": "%1$s was killed with Essence",
+  "death.attack.essence.item": "%1$s was killed by %2$s using Essence and holding %3$s",
+  "death.attack.essence.player": "%1$s was killed by %2$s using Essence",
+  "entity.abosessence.essence_ball": "Essence Ball"
+}
