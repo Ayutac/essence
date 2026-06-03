@@ -5,6 +5,7 @@ import net.blay09.mods.balm.core.BalmRegistrars;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import studio.abos.mc.essence.api.EssenceApi;
 import studio.abos.mc.essence.block.ModBlocks;
 import studio.abos.mc.essence.item.ModItems;
 
@@ -12,7 +13,7 @@ public class Essence {
 
     public static final Logger logger = LoggerFactory.getLogger(Essence.class);
 
-    public static final String MOD_ID = "abosessence";
+    public static final String MOD_ID = EssenceApi.MOD_ID;
 
     public static Identifier id(String path) {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
