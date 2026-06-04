@@ -1,13 +1,11 @@
 package studio.abos.mc.essence.entity;
 
-import lombok.NonNull;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import org.jspecify.annotations.Nullable;
 import studio.abos.mc.essence.damage.ModDamageTypes;
 
 import java.util.Collection;
@@ -18,16 +16,6 @@ public class EssenceSpikeSphereEntity extends EssenceEntity {
 
     protected EssenceSpikeSphereEntity(final Level level) {
         super(ModEntities.ESSENCE_SPIKE_SPHERE.value(), level);
-    }
-
-    @Override
-    public boolean canCollideWith(final @NonNull Entity entity) {
-        return true;
-    }
-
-    @Override
-    public boolean canBeCollidedWith(final @Nullable Entity other) {
-        return true;
     }
 
     @Override

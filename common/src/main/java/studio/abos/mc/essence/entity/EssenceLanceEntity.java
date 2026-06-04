@@ -16,7 +16,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.Nullable;
 import studio.abos.mc.essence.damage.ModDamageTypes;
 
 import java.util.Collection;
@@ -93,16 +92,6 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
                         new DamageSource(ModDamageTypes.essence(level()), getOwner()), 5f);
             }
         }
-    }
-
-    @Override
-    public boolean canCollideWith(final @NonNull Entity entity) {
-        return true;
-    }
-
-    @Override
-    public boolean canBeCollidedWith(final @Nullable Entity other) {
-        return true;
     }
 
     @Override

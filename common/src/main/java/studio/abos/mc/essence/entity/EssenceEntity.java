@@ -13,6 +13,7 @@ import net.minecraft.world.entity.TraceableEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.Nullable;
 
 public abstract class EssenceEntity extends Entity implements TraceableEntity {
 
@@ -59,6 +60,16 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity {
 
     @Override
     public boolean canBeHitByProjectile() {
+        return true;
+    }
+
+    @Override
+    public boolean canCollideWith(final @NonNull Entity entity) {
+        return true;
+    }
+
+    @Override
+    public boolean canBeCollidedWith(final @Nullable Entity other) {
         return true;
     }
 

@@ -2,13 +2,11 @@ package studio.abos.mc.essence.entity;
 
 import lombok.NonNull;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.Nullable;
 
 public class EssencePillarEntity extends EssenceEntity {
 
@@ -32,16 +30,6 @@ public class EssencePillarEntity extends EssenceEntity {
         level().getEntities(this, getBoundingBox(), EntitySelector.NO_SPECTATORS.and(ent -> !(ent instanceof EssencePillarEntity)))
                 .forEach(ent -> ent.setDeltaMovement(getDeltaMovement().add(0d, STEP_SIZE, 0d)));
 //        }
-    }
-
-    @Override
-    public boolean canCollideWith(final @NonNull Entity entity) {
-        return true;
-    }
-
-    @Override
-    public boolean canBeCollidedWith(final @Nullable Entity other) {
-        return true;
     }
 
     public static void summon(final LivingEntity user) {
