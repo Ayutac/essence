@@ -20,7 +20,7 @@ import studio.abos.mc.essence.damage.ModDamageTypes;
 
 import java.util.Collection;
 
-public class EssenceLanceEntity extends EssenceEntity {
+public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssence {
 
     public static final double STEP_SIZE = 0.5;
 

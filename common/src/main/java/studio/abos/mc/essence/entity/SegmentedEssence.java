@@ -1,0 +1,7 @@
+package studio.abos.mc.essence.entity;
+
+public interface SegmentedEssence {
+
+    SegmentedEssence getOrigin();
+
+}
