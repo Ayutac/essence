@@ -39,7 +39,7 @@ public class EssenceBallEntity extends EssenceEntity {
         final Vec3 nextLocation = hitResult.getLocation();
         setPos(nextLocation);
         // hit something
-        if (isAlive() && hitResult.getType() != HitResult.Type.MISS) {
+        if (isAlive() && !isRemoved() && hitResult.getType() != HitResult.Type.MISS) {
             onHit(hitResult);
         }
     }

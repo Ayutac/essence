@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
@@ -28,6 +29,23 @@ public class EssenceLanceEntity extends EssenceEntity {
     }
 
     protected int segment;
+    private EntityReference<@NonNull Entity> origin;
+
+    public void setOrigin(final EssenceLanceEntity origin) {
+        this.origin = EntityReference.of(origin);
+    }
+
+    public EssenceLanceEntity getOrigin() {
+        return (EssenceLanceEntity)EntityReference.getEntity(origin, level());
+    }
+
+    @Override
+    public void tick() {
+        if (!getOrigin().isAlive() || getOrigin().isRemoved()) {
+            discard();
+        }
+        super.tick();
+    }
 
     @Override
     protected void tickPhysics() {
@@ -35,7 +53,7 @@ public class EssenceLanceEntity extends EssenceEntity {
             // maybe hit entities
             final Collection<EntityHitResult> entitiesHit = this.findHitEntities(getBoundingBox().getMinPosition(), getBoundingBox().getMaxPosition());
             for (final EntityHitResult hitResult : entitiesHit) {
-                if (isAlive()) {
+                if (isAlive() && !isRemoved()) {
                     onHit(hitResult);
                 }
             }
@@ -44,6 +62,7 @@ public class EssenceLanceEntity extends EssenceEntity {
             // maybe add new segment
             final EssenceLanceEntity lance = new EssenceLanceEntity(level());
             lance.setOwner(getOwner());
+            lance.setOrigin(getOrigin());
             lance.segment = segment + 1;
             lance.setRot(getYRot(), getXRot());
             final double yRad = Math.toRadians(lance.getYRot());
@@ -88,12 +107,14 @@ public class EssenceLanceEntity extends EssenceEntity {
     protected void readAdditionalSaveData(final @NonNull ValueInput input) {
         super.readAdditionalSaveData(input);
         segment = input.read("Segment", Codec.INT).orElse(0);
+        origin = EntityReference.read(input, "Origin");
     }
 
     @Override
     protected void addAdditionalSaveData(final @NonNull ValueOutput output) {
         super.addAdditionalSaveData(output);
         output.store("Segment", Codec.INT, segment);
+        EntityReference.store(origin, output, "Origin");
     }
 
     public static void summon(final LivingEntity user) {
@@ -103,6 +124,7 @@ public class EssenceLanceEntity extends EssenceEntity {
         final Level level = user.level();
         final EssenceLanceEntity lance = new EssenceLanceEntity(level);
         lance.setOwner(user);
+        lance.setOrigin(lance);
         lance.setRot(user.getYRot(), user.getXRot());
         final double yRad = Math.toRadians(lance.getYRot());
         final double xRad = Math.toRadians(lance.getXRot());
