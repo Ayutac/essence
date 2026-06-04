@@ -8,6 +8,7 @@ import studio.abos.mc.essence.Essence;
 import studio.abos.mc.essence.entity.EssenceBallEntity;
 import studio.abos.mc.essence.entity.EssenceLanceEntity;
 import studio.abos.mc.essence.entity.EssencePillarEntity;
+import studio.abos.mc.essence.entity.EssenceSpikeSphereEntity;
 
 import java.util.function.Consumer;
 
@@ -15,7 +16,8 @@ public enum EssenceMoves implements EssenceMove {
 
     BALL("ball", EssenceBallEntity::summonAndShoot),
     PILLAR("pillar", EssencePillarEntity::summon),
-    LANCE("lance", EssenceLanceEntity::summon);
+    LANCE("lance", EssenceLanceEntity::summon),
+    SPIKE_SPHERE("spike_sphere",EssenceSpikeSphereEntity::summon);
 
     @Getter
     @NonNull

@@ -9,6 +9,7 @@ public class ModEntityRenderers {
         renderers.register(ModEntities.ESSENCE_BALL, EssenceBallRenderer::new);
         renderers.register(ModEntities.ESSENCE_PILLAR, EssencePillarRenderer::new);
         renderers.register(ModEntities.ESSENCE_LANCE, EssenceLanceRenderer::new);
+        renderers.register(ModEntities.ESSENCE_SPIKE_SPHERE, EssenceSpikeSphereRenderer::new);
     }
 
 }

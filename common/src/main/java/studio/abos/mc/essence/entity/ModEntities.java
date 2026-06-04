@@ -15,6 +15,7 @@ public class ModEntities {
     public static Holder<@NotNull EntityType<@NotNull EssenceBallEntity>> ESSENCE_BALL;
     public static Holder<@NotNull EntityType<@NotNull EssencePillarEntity>> ESSENCE_PILLAR;
     public static Holder<@NotNull EntityType<@NotNull EssenceLanceEntity>> ESSENCE_LANCE;
+    public static Holder<@NotNull EntityType<@NotNull EssenceSpikeSphereEntity>> ESSENCE_SPIKE_SPHERE;
 
     public static void initialize(BalmEntityTypeRegistrar entities) {
         ESSENCE_BALL = entities.register("essence_ball", () ->
@@ -29,6 +30,10 @@ public class ModEntities {
                 EntityType.Builder.of(new WorldOnlyEntityFactory<>(EssenceLanceEntity::new), MobCategory.MISC)
                         .sized(0.5f, 0.5f)
                         .eyeHeight(0.25f)).asHolder();
+        ESSENCE_SPIKE_SPHERE = entities.register("essence_spike_sphere", () ->
+                EntityType.Builder.of(new WorldOnlyEntityFactory<>(EssenceSpikeSphereEntity::new), MobCategory.MISC)
+                        .sized(2f, 2f)
+                        .eyeHeight(1f)).asHolder();
     }
 
     private record WorldOnlyEntityFactory<T extends Entity>(Function<Level, T> ctor) implements EntityType.EntityFactory<@NotNull T> {
