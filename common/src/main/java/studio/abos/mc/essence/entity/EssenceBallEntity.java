@@ -76,13 +76,13 @@ public class EssenceBallEntity extends EssenceEntity {
         final Level level = user.level();
         final EssenceBallEntity ball = new EssenceBallEntity(level);
         ball.setOwner(user);
-        ball.setPos(user.getEyePosition());
         ball.setRot(user.getYRot(), user.getXRot());
         final double yRad = Math.toRadians(ball.getYRot());
         final double xRad = Math.toRadians(ball.getXRot());
         final float xd = -Mth.sin(yRad) * Mth.cos(xRad);
         final float yd = -Mth.sin(xRad);
         final float zd = Mth.cos(yRad) * Mth.cos(xRad);
+        ball.setPos(user.getEyePosition().add(xd, yd, zd));
         ball.setDeltaMovement(xd, yd, zd);
         level.addFreshEntity(ball);
     }
