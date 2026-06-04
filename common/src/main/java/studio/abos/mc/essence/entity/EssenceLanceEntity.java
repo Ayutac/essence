@@ -1,16 +1,20 @@
 package studio.abos.mc.essence.entity;
 
-import net.minecraft.core.registries.Registries;
+import com.mojang.serialization.Codec;
+import lombok.NonNull;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 import studio.abos.mc.essence.damage.ModDamageTypes;
 
 import java.util.Collection;
@@ -23,38 +27,33 @@ public class EssenceLanceEntity extends EssenceEntity {
         super(ModEntities.ESSENCE_LANCE.value(), level);
     }
 
-    @Override
-    protected AABB makeBoundingBox(final Vec3 position) {
-        final double yRad = Math.toRadians(getYRot());
-        final double xRad = Math.toRadians(getXRot());
-        final float xd = -Mth.sin(yRad) * Mth.cos(xRad);
-        final float yd = -Mth.sin(xRad);
-        final float zd = Mth.cos(yRad) * Mth.cos(xRad);
-        return super.makeBoundingBox(position).expandTowards(new Vec3(xd, yd, zd).scale(STEP_SIZE * Mth.clamp(1 + tickCount, 1, 20)));
-    }
-
-    protected int tickCount;
+    protected int segment;
 
     @Override
     protected void tickPhysics() {
-        setBoundingBox(makeBoundingBox());
-        tickCount++;
-//        // get one tick further in theory
-//        final BlockHitResult blockHitResult = level().clipIncludingBorder(new ClipContext(
-//                position(), position().add(getDeltaMovement()), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-//        // what have we hit?
-//        final ArrayList<EntityHitResult> entitiesHit = new ArrayList<>(this.findHitEntities(position(), blockHitResult.getLocation()));
-//        // what have we hit first?
-//        entitiesHit.sort(Comparator.comparingDouble(c -> position().distanceToSqr(c.getEntity().position())));
-//        final EntityHitResult firstEntityHit = entitiesHit.isEmpty() ? null : entitiesHit.getFirst();
-//        // get one tick further in practice
-//        final HitResult hitResult = Objects.requireNonNullElse(firstEntityHit, blockHitResult);
-//        final Vec3 nextLocation = hitResult.getLocation();
-//        setPos(nextLocation);
-//        // hit something
-//        if (isAlive() && hitResult.getType() != HitResult.Type.MISS) {
-//            onHit(hitResult);
-//        }
+        if (tickCount == 0) {
+            // maybe hit entities
+            final Collection<EntityHitResult> entitiesHit = this.findHitEntities(getBoundingBox().getMinPosition(), getBoundingBox().getMaxPosition());
+            for (final EntityHitResult hitResult : entitiesHit) {
+                if (isAlive()) {
+                    onHit(hitResult);
+                }
+            }
+        }
+        if (tickCount == 1 && segment < 19) {
+            // maybe add new segment
+            final EssenceLanceEntity lance = new EssenceLanceEntity(level());
+            lance.setOwner(getOwner());
+            lance.segment = segment + 1;
+            lance.setRot(getYRot(), getXRot());
+            final double yRad = Math.toRadians(lance.getYRot());
+            final double xRad = Math.toRadians(lance.getXRot());
+            final float xd = -Mth.sin(yRad) * Mth.cos(xRad);
+            final float yd = -Mth.sin(xRad);
+            final float zd = Mth.cos(yRad) * Mth.cos(xRad);
+            lance.setPos(position().add(new Vec3(xd, yd, zd).scale(STEP_SIZE)));
+            level().addFreshEntity(lance);
+        }
     }
 
     protected Collection<EntityHitResult> findHitEntities(final Vec3 from, final Vec3 to) {
@@ -67,18 +66,34 @@ public class EssenceLanceEntity extends EssenceEntity {
         if (hitResult.getType() == HitResult.Type.MISS) {
             return;
         }
-        setDeltaMovement(Vec3.ZERO);
         if (hitResult.getType() == HitResult.Type.ENTITY) {
             if (!level().isClientSide()) {
-                if (((EntityHitResult) hitResult).getEntity().hurtServer((ServerLevel)level(),
-                        new DamageSource(level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageTypes.ESSENCE),
-                                getOwner()),
-                        1f)
-                ) {
-                    discard();
-                }
+                ((EntityHitResult) hitResult).getEntity().hurtServer((ServerLevel)level(),
+                        new DamageSource(ModDamageTypes.essence(level()), getOwner()), 5f);
             }
         }
+    }
+
+    @Override
+    public boolean canCollideWith(final @NonNull Entity entity) {
+        return true;
+    }
+
+    @Override
+    public boolean canBeCollidedWith(final @Nullable Entity other) {
+        return true;
+    }
+
+    @Override
+    protected void readAdditionalSaveData(final @NonNull ValueInput input) {
+        super.readAdditionalSaveData(input);
+        segment = input.read("Segment", Codec.INT).orElse(0);
+    }
+
+    @Override
+    protected void addAdditionalSaveData(final @NonNull ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        output.store("Segment", Codec.INT, segment);
     }
 
     public static void summon(final LivingEntity user) {

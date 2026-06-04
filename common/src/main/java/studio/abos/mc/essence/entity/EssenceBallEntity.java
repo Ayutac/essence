@@ -1,6 +1,5 @@
 package studio.abos.mc.essence.entity;
 
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -59,9 +58,7 @@ public class EssenceBallEntity extends EssenceEntity {
         if (hitResult.getType() == HitResult.Type.ENTITY) {
             if (!level().isClientSide()) {
                 if (((EntityHitResult) hitResult).getEntity().hurtServer((ServerLevel)level(),
-                        new DamageSource(level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(ModDamageTypes.ESSENCE),
-                                getOwner()),
-                        1f)
+                        new DamageSource(ModDamageTypes.essence(level()), getOwner()), 1f)
                 ) {
                     discard();
                 }

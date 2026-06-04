@@ -1,5 +1,6 @@
 package studio.abos.mc.essence.entity;
 
+import com.mojang.serialization.Codec;
 import lombok.NonNull;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -19,6 +20,7 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity {
     public static final int EFFECTIVE_RANGE_SQR = EFFECTIVE_RANGE * EFFECTIVE_RANGE;
 
     private EntityReference<@NonNull Entity> owner;
+    protected int tickCount;
 
     protected EssenceEntity(final EntityType<?> type, final Level level) {
         super(type, level);
@@ -33,6 +35,7 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity {
             return;
         }
         tickPhysics();
+        tickCount++;
     }
 
     protected abstract void tickPhysics();
@@ -67,10 +70,12 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity {
     @Override
     protected void readAdditionalSaveData(final @NonNull ValueInput input) {
         owner = EntityReference.read(input, "Owner");
+        tickCount = input.read("TickCount", Codec.INT).orElse(0);
     }
 
     @Override
     protected void addAdditionalSaveData(final @NonNull ValueOutput output) {
         EntityReference.store(owner, output, "Owner");
+        output.store("TickCount", Codec.INT, tickCount);
     }
 }
