@@ -14,6 +14,7 @@ public class ModEntities {
 
     public static Holder<@NotNull EntityType<@NotNull EssenceBallEntity>> ESSENCE_BALL;
     public static Holder<@NotNull EntityType<@NotNull EssencePillarEntity>> ESSENCE_PILLAR;
+    public static Holder<@NotNull EntityType<@NotNull EssenceLanceEntity>> ESSENCE_LANCE;
 
     public static void initialize(BalmEntityTypeRegistrar entities) {
         ESSENCE_BALL = entities.register("essence_ball", () ->
@@ -23,6 +24,10 @@ public class ModEntities {
         ESSENCE_PILLAR = entities.register("essence_pillar", () ->
                 EntityType.Builder.of(new WorldOnlyEntityFactory<>(EssencePillarEntity::new), MobCategory.MISC)
                         .sized(1f, 0.5f)
+                        .eyeHeight(0.25f)).asHolder();
+        ESSENCE_LANCE = entities.register("essence_lance", () ->
+                EntityType.Builder.of(new WorldOnlyEntityFactory<>(EssenceLanceEntity::new), MobCategory.MISC)
+                        .sized(0.5f, 0.5f)
                         .eyeHeight(0.25f)).asHolder();
     }
 

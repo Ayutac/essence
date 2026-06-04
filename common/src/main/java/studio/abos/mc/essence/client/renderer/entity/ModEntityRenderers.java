@@ -8,6 +8,7 @@ public class ModEntityRenderers {
     public static void initialize(final BalmEntityRendererRegistrar renderers) {
         renderers.register(ModEntities.ESSENCE_BALL, EssenceBallRenderer::new);
         renderers.register(ModEntities.ESSENCE_PILLAR, EssencePillarRenderer::new);
+        renderers.register(ModEntities.ESSENCE_LANCE, EssenceLanceRenderer::new);
     }
 
 }
