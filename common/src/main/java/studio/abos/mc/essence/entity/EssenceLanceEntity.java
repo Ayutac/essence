@@ -8,6 +8,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
@@ -41,7 +42,8 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
 
     @Override
     public void tick() {
-        if (!getOrigin().isAlive() || getOrigin().isRemoved()) {
+        final EssenceLanceEntity origin = getOrigin();
+        if (origin != null && (!origin.isAlive() || origin.isRemoved())) {
             discard();
         }
         super.tick();
@@ -53,7 +55,7 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
             // maybe hit entities
             final Collection<EntityHitResult> entitiesHit = this.findHitEntities(getBoundingBox().getMinPosition(), getBoundingBox().getMaxPosition());
             for (final EntityHitResult hitResult : entitiesHit) {
-                if (isAlive() && !isRemoved()) {
+                if (isAlive() && !isRemoved() && !(hitResult.getEntity() instanceof Player player && (player.isCreative() || player.isSpectator()))) {
                     onHit(hitResult);
                 }
             }
