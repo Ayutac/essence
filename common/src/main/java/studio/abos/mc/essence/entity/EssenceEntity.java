@@ -15,6 +15,9 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 public abstract class EssenceEntity extends Entity implements TraceableEntity {
 
+    public static final int EFFECTIVE_RANGE = 64;
+    public static final int EFFECTIVE_RANGE_SQR = EFFECTIVE_RANGE * EFFECTIVE_RANGE;
+
     private EntityReference<@NonNull Entity> owner;
 
     protected EssenceEntity(final EntityType<?> type, final Level level) {
@@ -25,7 +28,7 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity {
     public void tick() {
         super.tick();
         final LivingEntity owner = getOwner();
-        if (owner != null && (owner.isDeadOrDying() || owner.distanceToSqr(this) >= 64 * 64)) {
+        if (owner != null && (owner.isDeadOrDying() || owner.distanceToSqr(this) >= EFFECTIVE_RANGE_SQR)) {
             discard();
             return;
         }

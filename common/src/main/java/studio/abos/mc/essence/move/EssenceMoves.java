@@ -6,12 +6,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import studio.abos.mc.essence.Essence;
 import studio.abos.mc.essence.entity.EssenceBallEntity;
+import studio.abos.mc.essence.entity.EssencePillarEntity;
 
 import java.util.function.Consumer;
 
 public enum EssenceMoves implements EssenceMove {
 
-    BALL("ball", EssenceBallEntity::summonAndShoot);
+    BALL("ball", EssenceBallEntity::summonAndShoot),
+    PILLAR("pillar", EssencePillarEntity::summon);
 
     @Getter
     @NonNull
