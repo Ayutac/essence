@@ -58,6 +58,11 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity {
     }
 
     @Override
+    public boolean canBeHitByProjectile() {
+        return true;
+    }
+
+    @Override
     public boolean hurtServer(final @NonNull ServerLevel serverLevel, final @NonNull DamageSource damageSource, final float v) {
         return false;
     }
