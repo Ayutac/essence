@@ -14,6 +14,8 @@ import org.jspecify.annotations.Nullable;
 
 public class EssencePillarEntity extends EssenceEntity {
 
+    public static final double STEP_SIZE = 0.5;
+
     protected int tickCount;
 
     public EssencePillarEntity(final Level level) {
@@ -23,7 +25,7 @@ public class EssencePillarEntity extends EssenceEntity {
     @NonNull
     @Override
     protected AABB makeBoundingBox(final @NonNull Vec3 position) {
-        final AABB centered = new AABB(-0.5, 0d, -0.5, 0.5, Mth.clamp(0.5 * (1 + tickCount), 0.5, 10), 0.5);
+        final AABB centered = new AABB(-0.5, 0d, -0.5, 0.5, Mth.clamp(STEP_SIZE * (1 + tickCount), 0.5, 10), 0.5);
         return centered.move(position);
     }
 
@@ -32,7 +34,7 @@ public class EssencePillarEntity extends EssenceEntity {
         setBoundingBox(makeBoundingBox());
 //        if (tickCount <= 20) {
         level().getEntities(this, getBoundingBox(), EntitySelector.NO_SPECTATORS.and(ent -> !(ent instanceof EssencePillarEntity)))
-                .forEach(ent -> ent.setDeltaMovement(getDeltaMovement().add(0d, 0.5, 0d)));
+                .forEach(ent -> ent.setDeltaMovement(getDeltaMovement().add(0d, STEP_SIZE, 0d)));
 //        }
         tickCount++;
     }
