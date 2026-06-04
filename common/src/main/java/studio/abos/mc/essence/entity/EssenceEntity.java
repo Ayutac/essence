@@ -49,7 +49,7 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity {
     }
 
     public boolean canHitEntity(final Entity entity) {
-        if (entity == null || !entity.canBeHitByProjectile()) {
+        if (entity == null) {
             return false;
         } else {
             Entity owner = this.getOwner();

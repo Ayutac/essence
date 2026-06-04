@@ -3,6 +3,7 @@ package studio.abos.mc.essence.entity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
@@ -48,6 +49,14 @@ public class EssenceBallEntity extends EssenceEntity {
         return ProjectileUtil.getManyEntityHitResult(level(), this, from, to,
                 getBoundingBox().expandTowards(getDeltaMovement()).inflate(1.0), this::canHitEntity, false
         );
+    }
+
+    @Override
+    public boolean canHitEntity(final Entity entity) {
+        if (entity != null && !entity.canBeHitByProjectile()) {
+            return false;
+        }
+        return super.canHitEntity(entity);
     }
 
     protected void onHit(final HitResult hitResult) {
