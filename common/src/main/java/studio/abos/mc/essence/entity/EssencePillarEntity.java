@@ -1,5 +1,6 @@
 package studio.abos.mc.essence.entity;
 
+import com.mojang.datafixers.util.Pair;
 import lombok.NonNull;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntitySelector;
@@ -7,6 +8,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import studio.abos.mc.essence.attachment.EssenceAttachment;
+import studio.abos.mc.essence.move.EssenceMove;
+import studio.abos.mc.essence.move.EssenceMoves;
 
 public class EssencePillarEntity extends EssenceEntity {
 
@@ -14,6 +18,11 @@ public class EssencePillarEntity extends EssenceEntity {
 
     public EssencePillarEntity(final Level level) {
         super(ModEntities.ESSENCE_PILLAR.value(), level);
+    }
+
+    @Override
+    public EssenceMove getMoveType() {
+        return EssenceMoves.PILLAR;
     }
 
     @NonNull
@@ -33,12 +42,13 @@ public class EssencePillarEntity extends EssenceEntity {
     }
 
     public static void summon(final LivingEntity user) {
-        if (user == null) {
+        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.PILLAR)) {
             return;
         }
         final Level level = user.level();
         final EssencePillarEntity pillar = new EssencePillarEntity(level);
         pillar.setOwner(user);
+        EssenceAttachment.of(user).getActiveMoves().add(Pair.of(EssenceMoves.PILLAR, pillar));
         pillar.setPos(user.position());
         pillar.setYRot(user.getYRot());
         level.addFreshEntity(pillar);

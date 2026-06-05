@@ -1,5 +1,6 @@
 package studio.abos.mc.essence.entity;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -12,7 +13,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.damage.ModDamageTypes;
+import studio.abos.mc.essence.move.EssenceMove;
+import studio.abos.mc.essence.move.EssenceMoves;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,6 +27,11 @@ public class EssenceBallEntity extends EssenceEntity {
 
     public EssenceBallEntity(final Level level) {
         super(ModEntities.ESSENCE_BALL.value(), level);
+    }
+
+    @Override
+    public EssenceMove getMoveType() {
+        return EssenceMoves.BALL;
     }
 
     @Override
@@ -76,12 +85,13 @@ public class EssenceBallEntity extends EssenceEntity {
     }
 
     public static void summonAndShoot(final LivingEntity user) {
-        if (user == null) {
+        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.BALL)) {
             return;
         }
         final Level level = user.level();
         final EssenceBallEntity ball = new EssenceBallEntity(level);
         ball.setOwner(user);
+        EssenceAttachment.of(user).getActiveMoves().add(Pair.of(EssenceMoves.BALL, ball));
         ball.setRot(user.getYRot(), user.getXRot());
         final double yRad = Math.toRadians(ball.getYRot());
         final double xRad = Math.toRadians(ball.getXRot());

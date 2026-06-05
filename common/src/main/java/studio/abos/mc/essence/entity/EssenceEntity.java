@@ -1,5 +1,6 @@
 package studio.abos.mc.essence.entity;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -14,8 +15,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
+import studio.abos.mc.essence.attachment.EssenceAttachment;
+import studio.abos.mc.essence.move.DiscardMove;
+import studio.abos.mc.essence.move.EssenceMove;
 
-public abstract class EssenceEntity extends Entity implements TraceableEntity {
+public abstract class EssenceEntity extends Entity implements TraceableEntity, DiscardMove {
 
     public static final int EFFECTIVE_RANGE = 64;
     public static final int EFFECTIVE_RANGE_SQR = EFFECTIVE_RANGE * EFFECTIVE_RANGE;
@@ -47,6 +51,17 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity {
 
     public LivingEntity getOwner() {
         return (LivingEntity)EntityReference.getEntity(owner, level());
+    }
+
+    public abstract EssenceMove getMoveType();
+
+    @Override
+    public void remove(final @NonNull RemovalReason reason) {
+        final LivingEntity owner = getOwner();
+        if (owner != null) {
+            EssenceAttachment.of(owner).getActiveMoves().remove(Pair.of(getMoveType(), this));
+        }
+        super.remove(reason);
     }
 
     public boolean canHitEntity(final Entity entity) {

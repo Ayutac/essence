@@ -14,20 +14,24 @@ import java.util.function.Consumer;
 
 public enum EssenceMoves implements EssenceMove {
 
-    BALL("ball", EssenceBallEntity::summonAndShoot),
-    PILLAR("pillar", EssencePillarEntity::summon),
-    LANCE("lance", EssenceLanceEntity::summon),
-    SPIKE_SPHERE("spike_sphere",EssenceSpikeSphereEntity::summon);
+    BALL("ball", 1f, EssenceBallEntity::summonAndShoot),
+    PILLAR("pillar", 5f, EssencePillarEntity::summon),
+    LANCE("lance", 8f, EssenceLanceEntity::summon),
+    SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon);
 
     @Getter
     @NonNull
     private final Identifier id;
 
+    @Getter
+    private final float neededWillpower;
+
     @NonNull
     private final Consumer<LivingEntity> performance;
 
-    EssenceMoves(final @NonNull String path, final @NonNull Consumer<LivingEntity> performance) {
+    EssenceMoves(final @NonNull String path, final float neededWillpower, final @NonNull Consumer<LivingEntity> performance) {
         id = Essence.id(path);
+        this.neededWillpower = neededWillpower;
         this.performance = performance;
     }
 

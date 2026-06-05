@@ -1,8 +1,8 @@
 package studio.abos.mc.essence.attachment;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -12,10 +12,14 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import studio.abos.mc.essence.move.DiscardMove;
+import studio.abos.mc.essence.move.EssenceMove;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class EssenceAttachment {
 
     public static final Codec<EssenceAttachment> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -39,8 +43,35 @@ public class EssenceAttachment {
     private float willpower;
     private float willpowerBonus;
 
+    private List<Pair<EssenceMove, DiscardMove>> activeMoves = new LinkedList<>();
+
+    public EssenceAttachment(final float blue, final float red, final float yellow, final float purple, final float green, final float orange, final float willpower, final float willpowerBonus) {
+        this.blue = blue;
+        this.red = red;
+        this.yellow = yellow;
+        this.purple = purple;
+        this.green = green;
+        this.orange = orange;
+        this.willpower = willpower;
+        this.willpowerBonus = willpowerBonus;
+    }
+
     public float getImagination() {
         return blue + red + yellow + purple + green + orange;
+    }
+
+    public boolean attemptMove(EssenceMove move) {
+        float usedWillpower = (float)activeMoves.stream()
+                .map(Pair::getFirst)
+                .mapToDouble(EssenceMove::getNeededWillpower)
+                .sum();
+        while (willpower - usedWillpower < move.getNeededWillpower() && !activeMoves.isEmpty()) {
+            final Pair<EssenceMove, DiscardMove> nextMoveToVanish = activeMoves.getFirst();
+            nextMoveToVanish.getSecond().discard();
+            usedWillpower -= nextMoveToVanish.getFirst().getNeededWillpower();
+            activeMoves.removeFirst();
+        }
+        return willpower - usedWillpower >= move.getNeededWillpower();
     }
 
     public static EssenceAttachment of(@NonNull LivingEntity living) {

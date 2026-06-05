@@ -1,5 +1,6 @@
 package studio.abos.mc.essence.entity;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
 import net.minecraft.server.level.ServerLevel;
@@ -16,7 +17,10 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.damage.ModDamageTypes;
+import studio.abos.mc.essence.move.EssenceMove;
+import studio.abos.mc.essence.move.EssenceMoves;
 
 import java.util.Collection;
 
@@ -24,12 +28,17 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
 
     public static final double STEP_SIZE = 0.5;
 
+    protected int segment;
+    private EntityReference<@NonNull Entity> origin;
+
     public EssenceLanceEntity(final Level level) {
         super(ModEntities.ESSENCE_LANCE.value(), level);
     }
 
-    protected int segment;
-    private EntityReference<@NonNull Entity> origin;
+    @Override
+    public EssenceMove getMoveType() {
+        return EssenceMoves.LANCE;
+    }
 
     public void setOrigin(final EssenceLanceEntity origin) {
         this.origin = EntityReference.of(origin);
@@ -109,12 +118,13 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
     }
 
     public static void summon(final LivingEntity user) {
-        if (user == null) {
+        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.LANCE)) {
             return;
         }
         final Level level = user.level();
         final EssenceLanceEntity lance = new EssenceLanceEntity(level);
         lance.setOwner(user);
+        EssenceAttachment.of(user).getActiveMoves().add(Pair.of(EssenceMoves.LANCE, lance));
         lance.setOrigin(lance);
         lance.setRot(user.getYRot(), user.getXRot());
         final double yRad = Math.toRadians(lance.getYRot());

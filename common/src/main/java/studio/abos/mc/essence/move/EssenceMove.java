@@ -7,6 +7,8 @@ public interface EssenceMove {
 
     Identifier getId();
 
+    float getNeededWillpower();
+
     void perform(LivingEntity user);
 
 }
