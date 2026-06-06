@@ -22,7 +22,7 @@ public class EssenceMoveCommand {
 
     public int run(final CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         final ServerPlayer player = context.getSource().getPlayer();
-        if (player == null) {
+        if (player == null || player.isSpectator()) {
             return 0;
         }
 
