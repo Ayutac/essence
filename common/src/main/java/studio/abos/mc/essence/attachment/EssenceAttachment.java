@@ -67,9 +67,8 @@ public class EssenceAttachment {
                 .sum();
         while (willpower - usedWillpower < move.getNeededWillpower() && !activeMoves.isEmpty()) {
             final Pair<EssenceMove, DiscardMove> nextMoveToVanish = activeMoves.getFirst();
-            nextMoveToVanish.getSecond().discard();
+            nextMoveToVanish.getSecond().discard(); // also removes from the list of active moves
             usedWillpower -= nextMoveToVanish.getFirst().getNeededWillpower();
-            activeMoves.removeFirst();
         }
         return willpower - usedWillpower >= move.getNeededWillpower();
     }
