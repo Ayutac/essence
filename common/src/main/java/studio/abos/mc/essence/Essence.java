@@ -2,10 +2,12 @@ package studio.abos.mc.essence;
 
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.core.BalmRegistrars;
+import net.blay09.mods.balm.platform.event.callback.ServerPlayerCallback;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import studio.abos.mc.essence.api.EssenceApi;
+import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.block.ModBlocks;
 import studio.abos.mc.essence.attachment.ModDataAttachments;
 import studio.abos.mc.essence.command.EssenceInfoCommand;
@@ -41,6 +43,7 @@ public class Essence {
         Balm.commands().register(EssenceSetCommand::register);
         Balm.commands().register(EssenceMoveCommand::register);
         ModDamageTypes.initialize();
+        ServerPlayerCallback.Leave.EVENT.register(EssenceAttachment::dissipate);
     }
 
 }

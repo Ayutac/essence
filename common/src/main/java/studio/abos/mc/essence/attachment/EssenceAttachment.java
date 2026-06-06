@@ -73,12 +73,25 @@ public class EssenceAttachment {
         return willpower - usedWillpower >= move.getNeededWillpower();
     }
 
+    public void dissipateAll() {
+        while (!activeMoves.isEmpty()) {
+            activeMoves.getFirst().getSecond().discard();
+        }
+    }
+
     public static EssenceAttachment of(@NonNull LivingEntity living) {
         final EssenceAttachment essence = ModDataAttachments.ESSENCE.getOrCreate(living);
         if (living instanceof ServerPlayer player) {
             essence.setWillpower(calculateWillpower(player) + essence.getWillpowerBonus());
         }
         return essence;
+    }
+
+    public static void dissipate(@NonNull LivingEntity living) {
+        final EssenceAttachment essence = ModDataAttachments.ESSENCE.get(living);
+        if (essence != null) {
+            essence.dissipateAll();
+        }
     }
 
     public static float calculateWillpower(ServerPlayer player) {
