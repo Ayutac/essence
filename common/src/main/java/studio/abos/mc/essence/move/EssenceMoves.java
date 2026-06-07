@@ -11,6 +11,7 @@ import studio.abos.mc.essence.entity.EssenceLanceEntity;
 import studio.abos.mc.essence.entity.EssencePillarEntity;
 import studio.abos.mc.essence.entity.EssenceSpikeSphereEntity;
 import studio.abos.mc.essence.item.EssenceAxeItem;
+import studio.abos.mc.essence.item.EssencePickaxeItem;
 
 import java.util.function.Consumer;
 
@@ -20,6 +21,7 @@ public enum EssenceMoves implements EssenceMove {
     BALL("ball", 1f, EssenceBallEntity::summonAndShoot),
     BRIDGE("bridge", 10f, EssenceBridgeEntity::summon),
     DISSIPATE("dissipate", 0f, EssenceMove::dissipate),
+    PICKAXE("pickaxe", 5f, EssencePickaxeItem::summon),
     PILLAR("pillar", 5f, EssencePillarEntity::summon),
     LANCE("lance", 8f, EssenceLanceEntity::summon),
     RETRACT("retract", 0f, EssenceMove::retract),
