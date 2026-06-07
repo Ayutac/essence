@@ -9,7 +9,6 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.item.Items;
 import studio.abos.mc.essence.Essence;
 import studio.abos.mc.essence.block.ModBlocks;
-import studio.abos.mc.essence.item.ModItems;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -32,11 +31,11 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .unlockedBy("has_diamond", has(Items.DIAMOND))
                         .save(exporter);
 
-                shapeless(RecipeCategory.DECORATIONS, ModItems.yourItem)
-                        .requires(Items.DIAMOND)
-                        .requires(Items.BONE_MEAL)
-                        .unlockedBy("has_bone_meal", has(Items.BONE_MEAL))
-                        .save(exporter);
+//                shapeless(RecipeCategory.DECORATIONS, ModItems.yourItem)
+//                        .requires(Items.DIAMOND)
+//                        .requires(Items.BONE_MEAL)
+//                        .unlockedBy("has_bone_meal", has(Items.BONE_MEAL))
+//                        .save(exporter);
             }
         };
     }

@@ -5,6 +5,7 @@
   "refmap": "essence.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ItemStackMixin",
     "LivingEntityMixin",
     "ServerPlayerGameModeMixin"
   ],

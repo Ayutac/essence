@@ -7,5 +7,7 @@ import net.minecraft.world.item.Item;
 import static studio.abos.mc.essence.Essence.id;
 
 public class ModItemTags {
-    public static final TagKey<Item> YOUR_TAG = TagKey.create(Registries.ITEM, id("your_tag"));
+
+    public static final TagKey<Item> ESSENCE_TOOL_MATERIALS = TagKey.create(Registries.ITEM, id("essence_tool_materials"));
+
 }
