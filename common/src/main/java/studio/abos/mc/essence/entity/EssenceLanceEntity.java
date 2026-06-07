@@ -139,7 +139,7 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
     }
 
     public static void summon(final LivingEntity user) {
-        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.LANCE)) {
+        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.LANCE, user)) {
             return;
         }
         final Level level = user.level();

@@ -60,22 +60,22 @@ public class EssenceAttachment {
         return blue + red + yellow + purple + green + orange;
     }
 
-    public boolean attemptMove(EssenceMove move) {
+    public boolean attemptMove(final EssenceMove move, final LivingEntity user) {
         float usedWillpower = (float)activeMoves.stream()
                 .map(Pair::getFirst)
                 .mapToDouble(EssenceMove::getNeededWillpower)
                 .sum();
         while (willpower - usedWillpower < move.getNeededWillpower() && !activeMoves.isEmpty()) {
             final Pair<EssenceMove, DiscardMove> nextMoveToVanish = activeMoves.getFirst();
-            nextMoveToVanish.getSecond().discard(); // also removes from the list of active moves
+            nextMoveToVanish.getSecond().discard(user); // also removes from the list of active moves
             usedWillpower -= nextMoveToVanish.getFirst().getNeededWillpower();
         }
         return willpower - usedWillpower >= move.getNeededWillpower();
     }
 
-    public void dissipateAll() {
-        while (!activeMoves.isEmpty()) {
-            activeMoves.getFirst().getSecond().discard();
+    public void dissipateAll(final LivingEntity user) {
+        while (!activeMoves.isEmpty()) { // dangerous
+            activeMoves.getFirst().getSecond().discard(user);
         }
     }
 
@@ -90,7 +90,7 @@ public class EssenceAttachment {
     public static void dissipate(@NonNull LivingEntity living) {
         final EssenceAttachment essence = ModDataAttachments.ESSENCE.get(living);
         if (essence != null) {
-            essence.dissipateAll();
+            essence.dissipateAll(living);
         }
     }
 

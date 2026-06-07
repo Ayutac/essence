@@ -58,6 +58,13 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity, D
     public abstract void retract();
 
     @Override
+    public void discard(final LivingEntity user) {
+        if (user == getOwner()) {
+            discard();
+        }
+    }
+
+    @Override
     public void remove(final @NonNull RemovalReason reason) {
         final LivingEntity owner = getOwner();
         if (owner != null) {

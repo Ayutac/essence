@@ -103,7 +103,7 @@ public class EssenceBridgeEntity extends EssenceEntity implements SegmentedEssen
     }
 
     public static void summon(final LivingEntity user) {
-        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.BRIDGE)) {
+        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.BRIDGE, user)) {
             return;
         }
         final Level level = user.level();

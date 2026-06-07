@@ -57,7 +57,7 @@ public class EssencePillarEntity extends EssenceEntity {
     }
 
     public static void summon(final LivingEntity user) {
-        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.PILLAR)) {
+        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.PILLAR, user)) {
             return;
         }
         final Level level = user.level();

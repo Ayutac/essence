@@ -32,7 +32,7 @@ public interface EssenceMove {
         );
     }
 
-    static void dissipate(LivingEntity user) {
+    static void dissipate(final LivingEntity user) {
         final EntityHitResult lookedAtEssence = getOwnedEssenceInLineOfSight(user);
         if (lookedAtEssence != null) {
             if (lookedAtEssence.getEntity() instanceof SegmentedEssence part && part.getOrigin() != null) {
@@ -44,21 +44,21 @@ public interface EssenceMove {
         }
     }
 
-    static void retract(LivingEntity user) {
+    static void retract(final LivingEntity user) {
         final EntityHitResult lookedAtEssence = getOwnedEssenceInLineOfSight(user);
         if (lookedAtEssence != null) {
             ((EssenceEntity)lookedAtEssence.getEntity()).retract();
         }
     }
 
-    static void retractAll(LivingEntity user) {
+    static void retractAll(final LivingEntity user) {
         final List<Pair<EssenceMove, DiscardMove>> moves = new ArrayList<>(EssenceAttachment.of(user).getActiveMoves());
         for (final var entry : moves) {
             if (entry.getSecond() instanceof EssenceEntity entity) {
                 entity.retract();
             }
             else {
-                entry.getSecond().discard();
+                entry.getSecond().discard(user);
             }
         }
     }

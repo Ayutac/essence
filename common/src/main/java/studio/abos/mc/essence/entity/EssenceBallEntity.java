@@ -116,7 +116,7 @@ public class EssenceBallEntity extends EssenceEntity {
     }
 
     public static void summonAndShoot(final LivingEntity user) {
-        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.BALL)) {
+        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.BALL, user)) {
             return;
         }
         final Level level = user.level();

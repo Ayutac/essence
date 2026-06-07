@@ -79,7 +79,7 @@ public class EssenceSpikeSphereEntity extends EssenceEntity {
     }
 
     public static void summon(final LivingEntity user) {
-        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.SPIKE_SPHERE)) {
+        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.SPIKE_SPHERE, user)) {
             return;
         }
         final Level level = user.level();
