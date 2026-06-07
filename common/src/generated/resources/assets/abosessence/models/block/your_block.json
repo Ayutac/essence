@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "yourmod:block/your_block"
+    "all": "abosessence:block/your_block"
   }
 }

@@ -7,5 +7,7 @@ import net.minecraft.world.level.block.Block;
 import static studio.abos.mc.essence.Essence.id;
 
 public class ModBlockTags {
-    public static final TagKey<Block> YOUR_TAG = TagKey.create(Registries.BLOCK, id("your_tag"));
+
+    public static final TagKey<Block> INCORRECT_FOR_ESSENCE_TOOL = TagKey.create(Registries.BLOCK, id("incorrect_for_essence_tool"));
+
 }

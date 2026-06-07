@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "yourmod:item/your_block"
+    "model": "abosessence:item/your_block"
   }
 }

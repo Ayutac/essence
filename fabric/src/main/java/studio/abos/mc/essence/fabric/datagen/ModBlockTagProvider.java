@@ -3,7 +3,7 @@ package studio.abos.mc.essence.fabric.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
-import studio.abos.mc.essence.block.ModBlocks;
+import net.minecraft.tags.BlockTags;
 import studio.abos.mc.essence.tag.ModBlockTags;
 
 import java.util.concurrent.CompletableFuture;
@@ -15,6 +15,6 @@ public class ModBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
-        valueLookupBuilder(ModBlockTags.YOUR_TAG).add(ModBlocks.yourBlock.asBlock());
+        valueLookupBuilder(ModBlockTags.INCORRECT_FOR_ESSENCE_TOOL).addOptionalTag(BlockTags.INCORRECT_FOR_DIAMOND_TOOL);
     }
 }

@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "yourmod:your_block"
+          "name": "abosessence:your_block"
         }
       ],
       "rolls": 1.0

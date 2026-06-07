@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "yourmod:your_block"
+        "recipe": "abosessence:your_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "yourmod:your_block"
+      "abosessence:your_block"
     ]
   }
 }
