@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import studio.abos.mc.essence.item.EssenceItem;
 
 @Mixin(AbstractMinecartContainer.class)
-public class AbstractMinecartContainerMixin {
+public abstract class AbstractMinecartContainerMixin {
 
     @Inject(method = "Lnet/minecraft/world/entity/vehicle/minecart/AbstractMinecartContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V", at = @At("HEAD"), cancellable = true)
     public void abosessence$dontStoreEssenceItems(final int slot, final ItemStack itemStack, final CallbackInfo ci) {
