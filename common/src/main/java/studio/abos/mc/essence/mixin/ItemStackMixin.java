@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import studio.abos.mc.essence.item.EssenceItem;
 
 @Mixin(ItemStack.class)
-public class ItemStackMixin {
+public abstract class ItemStackMixin {
 
     @Inject(method = "isStackable", at = @At("RETURN"), cancellable = true)
     public void abosessence$dontStackEssenceTools(final CallbackInfoReturnable<Boolean> cir) {
@@ -19,6 +19,13 @@ public class ItemStackMixin {
 
     @Inject(method = "isDamageableItem", at = @At("RETURN"), cancellable = true)
     public void abosessence$dontDamageEssenceTools(final CallbackInfoReturnable<Boolean> cir) {
+        if (((ItemStack)(Object)this).getItem() instanceof EssenceItem) {
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "isEnchantable", at = @At("RETURN"), cancellable = true)
+    public void abosessence$dontEnchantEssenceTools(final CallbackInfoReturnable<Boolean> cir) {
         if (((ItemStack)(Object)this).getItem() instanceof EssenceItem) {
             cir.setReturnValue(false);
         }

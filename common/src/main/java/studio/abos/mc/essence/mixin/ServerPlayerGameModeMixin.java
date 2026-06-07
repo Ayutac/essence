@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import studio.abos.mc.essence.attachment.EssenceAttachment;
 
 @Mixin(ServerPlayerGameMode.class)
-public class ServerPlayerGameModeMixin {
+public abstract class ServerPlayerGameModeMixin {
 
     @Shadow
     @Final
