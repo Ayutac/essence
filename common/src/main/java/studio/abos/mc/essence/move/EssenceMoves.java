@@ -12,6 +12,7 @@ import studio.abos.mc.essence.entity.EssencePillarEntity;
 import studio.abos.mc.essence.entity.EssenceSpikeSphereEntity;
 import studio.abos.mc.essence.item.EssenceAxeItem;
 import studio.abos.mc.essence.item.EssencePickaxeItem;
+import studio.abos.mc.essence.item.EssenceShovelItem;
 
 import java.util.function.Consumer;
 
@@ -26,6 +27,7 @@ public enum EssenceMoves implements EssenceMove {
     LANCE("lance", 8f, EssenceLanceEntity::summon),
     RETRACT("retract", 0f, EssenceMove::retract),
     RETRACT_ALL("retract_all", 0f, EssenceMove::retractAll),
+    SHOVEL("shovel", 2.5f, EssenceShovelItem::summon),
     SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon);
 
     @Getter

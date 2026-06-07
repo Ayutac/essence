@@ -13,10 +13,12 @@ public class ModItems {
 
     public static DeferredItem ESSENCE_AXE;
     public static DeferredItem ESSENCE_PICKAXE;
+    public static DeferredItem ESSENCE_SHOVEL;
 
     public static void initialize(final BalmItemRegistrar items) {
         ESSENCE_AXE = items.register("essence_axe", EssenceAxeItem::new).asDeferredItem();
         ESSENCE_PICKAXE = items.register("essence_pickaxe", EssencePickaxeItem::new).asDeferredItem();
+        ESSENCE_SHOVEL = items.register("essence_shovel", EssenceShovelItem::new).asDeferredItem();
     }
 
     public static void initialize(final BalmCreativeModeTabRegistrar creativeModeTabs) {
