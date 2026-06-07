@@ -1,12 +1,17 @@
 package studio.abos.mc.essence.move;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.entity.EssenceEntity;
 import studio.abos.mc.essence.entity.SegmentedEssence;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface EssenceMove {
 
@@ -43,6 +48,18 @@ public interface EssenceMove {
         final EntityHitResult lookedAtEssence = getOwnedEssenceInLineOfSight(user);
         if (lookedAtEssence != null) {
             ((EssenceEntity)lookedAtEssence.getEntity()).retract();
+        }
+    }
+
+    static void retractAll(LivingEntity user) {
+        final List<Pair<EssenceMove, DiscardMove>> moves = new ArrayList<>(EssenceAttachment.of(user).getActiveMoves());
+        for (final var entry : moves) {
+            if (entry.getSecond() instanceof EssenceEntity entity) {
+                entity.retract();
+            }
+            else {
+                entry.getSecond().discard();
+            }
         }
     }
 

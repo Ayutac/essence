@@ -19,6 +19,7 @@ public enum EssenceMoves implements EssenceMove {
     PILLAR("pillar", 5f, EssencePillarEntity::summon),
     LANCE("lance", 8f, EssenceLanceEntity::summon),
     RETRACT("retract", 0f, EssenceMove::retract),
+    RETRACT_ALL("retract_all", 0f, EssenceMove::retractAll),
     SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon);
 
     @Getter
