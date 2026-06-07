@@ -29,8 +29,8 @@ public enum EssenceMoves implements EssenceMove {
     RETRACT("retract", 0f, EssenceMove::retract),
     RETRACT_ALL("retract_all", 0f, EssenceMove::retractAll),
     SHOVEL("shovel", 3f, EssenceShovelItem::summon),
-    SWORD("sword", 7f, EssenceSwordItem::summon),
-    SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon);
+    SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon),
+    SWORD("sword", 7f, EssenceSwordItem::summon);
 
     @Getter
     @NonNull
