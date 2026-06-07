@@ -110,13 +110,9 @@ public class EssenceBallEntity extends EssenceEntity {
             return;
         }
         retracting = true;
-        setRot(owner.getYHeadRot() - 180, -owner.getXRot());
-        final double yRad = Math.toRadians(getYRot());
-        final double xRad = Math.toRadians(getXRot());
-        final float xd = -Mth.sin(yRad) * Mth.cos(xRad);
-        final float yd = -Mth.sin(xRad);
-        final float zd = Mth.cos(yRad) * Mth.cos(xRad);
-        setDeltaMovement(xd, yd, zd);
+        final Vec3 direction = owner.getEyePosition().subtract(position()).normalize();
+        setRot(owner.getYHeadRot() - 180, -owner.getXRot()); // FIXME fix the rotation
+        setDeltaMovement(direction);
     }
 
     public static void summonAndShoot(final LivingEntity user) {
