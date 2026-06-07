@@ -15,6 +15,11 @@ import java.util.List;
 
 public interface EssenceItem extends ItemLike, DiscardMove {
 
+    @Override
+    default void discard(final LivingEntity user) {
+        EssenceItem.discard(user, getClass());
+    }
+
     static void discard(final LivingEntity user, final Class<? extends EssenceItem> itemClass) {
         boolean discarded = false;
         for (final EquipmentSlot slot : EquipmentSlot.values()) {

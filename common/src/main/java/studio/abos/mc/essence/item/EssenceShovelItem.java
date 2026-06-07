@@ -16,11 +16,6 @@ public class EssenceShovelItem extends ShovelItem implements EssenceItem {
         super(ModItems.ESSENCE_MATERIAL, 1.5f, -3f, properties);
     }
 
-    @Override
-    public void discard(final LivingEntity user) {
-        EssenceItem.discard(user, getClass());
-    }
-
     public static void summon(final LivingEntity user) {
         if (user == null || !user.getActiveItem().isEmpty() || user.isSpectator() || !EssenceAttachment.of(user).attemptMove(EssenceMoves.AXE, user)) {
             return;

@@ -16,11 +16,6 @@ public class EssencePickaxeItem extends Item implements EssenceItem {
         super(properties.pickaxe(ModItems.ESSENCE_MATERIAL, 1f, -2.8f));
     }
 
-    @Override
-    public void discard(final LivingEntity user) {
-        EssenceItem.discard(user, getClass());
-    }
-
     public static void summon(final LivingEntity user) {
         if (user == null || !user.getActiveItem().isEmpty() || user.isSpectator() || !EssenceAttachment.of(user).attemptMove(EssenceMoves.AXE, user)) {
             return;
