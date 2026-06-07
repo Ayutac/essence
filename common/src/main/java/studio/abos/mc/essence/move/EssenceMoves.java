@@ -6,6 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import studio.abos.mc.essence.Essence;
 import studio.abos.mc.essence.entity.EssenceBallEntity;
+import studio.abos.mc.essence.entity.EssenceBridgeEntity;
 import studio.abos.mc.essence.entity.EssenceLanceEntity;
 import studio.abos.mc.essence.entity.EssencePillarEntity;
 import studio.abos.mc.essence.entity.EssenceSpikeSphereEntity;
@@ -15,6 +16,7 @@ import java.util.function.Consumer;
 public enum EssenceMoves implements EssenceMove {
 
     BALL("ball", 1f, EssenceBallEntity::summonAndShoot),
+    BRIDGE("bridge", 10f, EssenceBridgeEntity::summon),
     DISSIPATE("dissipate", 0f, EssenceMove::dissipate),
     PILLAR("pillar", 5f, EssencePillarEntity::summon),
     LANCE("lance", 8f, EssenceLanceEntity::summon),
