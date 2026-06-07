@@ -10,11 +10,13 @@ import studio.abos.mc.essence.entity.EssenceBridgeEntity;
 import studio.abos.mc.essence.entity.EssenceLanceEntity;
 import studio.abos.mc.essence.entity.EssencePillarEntity;
 import studio.abos.mc.essence.entity.EssenceSpikeSphereEntity;
+import studio.abos.mc.essence.item.EssenceAxeItem;
 
 import java.util.function.Consumer;
 
 public enum EssenceMoves implements EssenceMove {
 
+    AXE("axe", 6f, EssenceAxeItem::summon),
     BALL("ball", 1f, EssenceBallEntity::summonAndShoot),
     BRIDGE("bridge", 10f, EssenceBridgeEntity::summon),
     DISSIPATE("dissipate", 0f, EssenceMove::dissipate),
