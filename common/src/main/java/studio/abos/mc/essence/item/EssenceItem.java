@@ -1,4 +1,7 @@
 package studio.abos.mc.essence.item;
 
-public interface EssenceItem {
+import net.minecraft.world.level.ItemLike;
+
+public interface EssenceItem extends ItemLike {
+
 }
