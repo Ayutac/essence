@@ -31,4 +31,12 @@ public abstract class ItemStackMixin {
         }
     }
 
+    // TODO is this needed?
+    @Inject(method = "copyAndClear()Lnet/minecraft/world/item/ItemStack;", at = @At("RETURN"), cancellable = true)
+    public void abosessence$dontPutEssenceToolsAnywhere(final CallbackInfoReturnable<ItemStack> cir) {
+        if (((ItemStack)(Object)this).getItem() instanceof EssenceItem) {
+            cir.setReturnValue(ItemStack.EMPTY);
+        }
+    }
+
 }
