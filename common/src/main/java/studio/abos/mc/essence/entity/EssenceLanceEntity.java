@@ -104,6 +104,27 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
     }
 
     @Override
+    public void retract() {
+        final Vec3 position = position();
+        final LivingEntity owner = getOwner();
+        final EssenceBallEntity ball = new EssenceBallEntity(level());
+        if (owner != null) {
+            ball.setOwner(owner);
+            EssenceAttachment.of(owner).getActiveMoves().add(Pair.of(EssenceMoves.BALL, ball));
+        }
+        ball.setPos(position);
+        level().addFreshEntity(ball);
+        ball.retract();
+        final EssenceLanceEntity origin = getOrigin();
+        if (origin != null && this != origin) {
+            origin.discard();
+        }
+        else {
+            discard();
+        }
+    }
+
+    @Override
     protected void readAdditionalSaveData(final @NonNull ValueInput input) {
         super.readAdditionalSaveData(input);
         segment = input.read("Segment", Codec.INT).orElse(0);

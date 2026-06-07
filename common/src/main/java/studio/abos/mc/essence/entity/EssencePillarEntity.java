@@ -41,6 +41,21 @@ public class EssencePillarEntity extends EssenceEntity {
 //        }
     }
 
+    @Override
+    public void retract() {
+        final Vec3 position = position();
+        final LivingEntity owner = getOwner();
+        final EssenceBallEntity ball = new EssenceBallEntity(level());
+        if (owner != null) {
+            ball.setOwner(owner);
+            EssenceAttachment.of(owner).getActiveMoves().add(Pair.of(EssenceMoves.BALL, ball));
+        }
+        ball.setPos(position);
+        level().addFreshEntity(ball);
+        ball.retract();
+        discard();
+    }
+
     public static void summon(final LivingEntity user) {
         if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.PILLAR)) {
             return;

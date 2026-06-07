@@ -18,6 +18,7 @@ public enum EssenceMoves implements EssenceMove {
     DISSIPATE("dissipate", 0f, EssenceMove::dissipate),
     PILLAR("pillar", 5f, EssencePillarEntity::summon),
     LANCE("lance", 8f, EssenceLanceEntity::summon),
+    RETRACT("retract", 0f, EssenceMove::retract),
     SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon);
 
     @Getter

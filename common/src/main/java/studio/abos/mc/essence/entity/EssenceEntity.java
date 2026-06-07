@@ -55,6 +55,8 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity, D
 
     public abstract EssenceMove getMoveType();
 
+    public abstract void retract();
+
     @Override
     public void remove(final @NonNull RemovalReason reason) {
         final LivingEntity owner = getOwner();

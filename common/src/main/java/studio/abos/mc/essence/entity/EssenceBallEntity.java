@@ -1,6 +1,8 @@
 package studio.abos.mc.essence.entity;
 
 import com.mojang.datafixers.util.Pair;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -25,6 +27,10 @@ import java.util.Objects;
 
 public class EssenceBallEntity extends EssenceEntity {
 
+    @Getter
+    @Setter
+    protected boolean retracting;
+
     public EssenceBallEntity(final Level level) {
         super(ModEntities.ESSENCE_BALL.value(), level);
     }
@@ -47,10 +53,17 @@ public class EssenceBallEntity extends EssenceEntity {
         // get one tick further in practice
         final HitResult hitResult = Objects.requireNonNullElse(firstEntityHit, blockHitResult);
         final Vec3 nextLocation = hitResult.getLocation();
-        setPos(nextLocation);
-        // hit something
-        if (isAlive() && !isRemoved() && hitResult.getType() != HitResult.Type.MISS) {
-            onHit(hitResult);
+        if (firstEntityHit == null || firstEntityHit.getEntity() != getOwner() || !retracting) {
+            setPos(nextLocation);
+            // hit something
+            if (isAlive() && !isRemoved() && hitResult.getType() != HitResult.Type.MISS) {
+                onHit(hitResult);
+            }
+        }
+        else {
+            // we don't go hitting the user, even in theory
+            retracting = false;
+            setDeltaMovement(Vec3.ZERO);
         }
     }
 
@@ -62,8 +75,13 @@ public class EssenceBallEntity extends EssenceEntity {
 
     @Override
     public boolean canHitEntity(final Entity entity) {
-        if (entity != null && !entity.canBeHitByProjectile()) {
-            return false;
+        if (entity != null) {
+            if (!entity.canBeHitByProjectile()) {
+                return false;
+            }
+            if (retracting && entity == getOwner()) {
+                return true;
+            }
         }
         return super.canHitEntity(entity);
     }
@@ -74,14 +92,31 @@ public class EssenceBallEntity extends EssenceEntity {
         }
         setDeltaMovement(Vec3.ZERO);
         if (hitResult.getType() == HitResult.Type.ENTITY) {
-            if (!level().isClientSide()) {
-                if (((EntityHitResult) hitResult).getEntity().hurtServer((ServerLevel)level(),
+            final Entity hitEntity = ((EntityHitResult) hitResult).getEntity();
+            if (!level().isClientSide() && hitEntity != getOwner()) {
+                if (hitEntity.hurtServer((ServerLevel)level(),
                         new DamageSource(ModDamageTypes.essence(level()), getOwner()), 1f)
                 ) {
                     discard();
                 }
             }
         }
+    }
+
+    @Override
+    public void retract() {
+        final LivingEntity owner = getOwner();
+        if (owner == null) {
+            return;
+        }
+        retracting = true;
+        setRot(owner.getYHeadRot() - 180, -owner.getXRot());
+        final double yRad = Math.toRadians(getYRot());
+        final double xRad = Math.toRadians(getXRot());
+        final float xd = -Mth.sin(yRad) * Mth.cos(xRad);
+        final float yd = -Mth.sin(xRad);
+        final float zd = Mth.cos(yRad) * Mth.cos(xRad);
+        setDeltaMovement(xd, yd, zd);
     }
 
     public static void summonAndShoot(final LivingEntity user) {
@@ -92,7 +127,7 @@ public class EssenceBallEntity extends EssenceEntity {
         final EssenceBallEntity ball = new EssenceBallEntity(level);
         ball.setOwner(user);
         EssenceAttachment.of(user).getActiveMoves().add(Pair.of(EssenceMoves.BALL, ball));
-        ball.setRot(user.getYRot(), user.getXRot());
+        ball.setRot(user.getYHeadRot(), user.getXRot());
         final double yRad = Math.toRadians(ball.getYRot());
         final double xRad = Math.toRadians(ball.getXRot());
         final float xd = -Mth.sin(yRad) * Mth.cos(xRad);

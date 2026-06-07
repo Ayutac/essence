@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.damage.ModDamageTypes;
 import studio.abos.mc.essence.move.EssenceMove;
@@ -25,6 +26,21 @@ public class EssenceSpikeSphereEntity extends EssenceEntity {
     @Override
     public EssenceMove getMoveType() {
         return EssenceMoves.SPIKE_SPHERE;
+    }
+
+    @Override
+    public void retract() {
+        final Vec3 position = position();
+        final LivingEntity owner = getOwner();
+        final EssenceBallEntity ball = new EssenceBallEntity(level());
+        if (owner != null) {
+            ball.setOwner(owner);
+            EssenceAttachment.of(owner).getActiveMoves().add(Pair.of(EssenceMoves.BALL, ball));
+        }
+        ball.setPos(position);
+        level().addFreshEntity(ball);
+        ball.retract();
+        discard();
     }
 
     @Override

@@ -16,15 +16,19 @@ public interface EssenceMove {
 
     void perform(LivingEntity user);
 
-    static void dissipate(LivingEntity user) {
+    static EntityHitResult getOwnedEssenceInLineOfSight(final LivingEntity user) {
         final Vec3 start = user.getEyePosition();
-        final EntityHitResult lookedAtEssence = ProjectileUtil.getEntityHitResult(user, start,
+        return ProjectileUtil.getEntityHitResult(user, start,
                 start.add(user.getLookAngle().scale(EssenceEntity.EFFECTIVE_RANGE)),
                 user.getBoundingBox().inflate(EssenceEntity.EFFECTIVE_RANGE_SQR),
                 entity -> entity instanceof EssenceEntity essence
                         && essence.getOwner() == user,
                 EssenceEntity.EFFECTIVE_RANGE_SQR
         );
+    }
+
+    static void dissipate(LivingEntity user) {
+        final EntityHitResult lookedAtEssence = getOwnedEssenceInLineOfSight(user);
         if (lookedAtEssence != null) {
             if (lookedAtEssence.getEntity() instanceof SegmentedEssence part && part.getOrigin() != null) {
                 part.getOrigin().discard();
@@ -32,6 +36,13 @@ public interface EssenceMove {
             else {
                 lookedAtEssence.getEntity().discard();
             }
+        }
+    }
+
+    static void retract(LivingEntity user) {
+        final EntityHitResult lookedAtEssence = getOwnedEssenceInLineOfSight(user);
+        if (lookedAtEssence != null) {
+            ((EssenceEntity)lookedAtEssence.getEntity()).retract();
         }
     }
 
