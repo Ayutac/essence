@@ -19,17 +19,17 @@ import java.util.function.Consumer;
 
 public enum EssenceMoves implements EssenceMove {
 
-    AXE("axe", 6f, EssenceAxeItem::summon),
+    AXE("axe", 8f, EssenceAxeItem::summon),
     BALL("ball", 1f, EssenceBallEntity::summonAndShoot),
     BRIDGE("bridge", 10f, EssenceBridgeEntity::summon),
     DISSIPATE("dissipate", 0f, EssenceMove::dissipate),
-    PICKAXE("pickaxe", 5f, EssencePickaxeItem::summon),
+    PICKAXE("pickaxe", 6f, EssencePickaxeItem::summon),
     PILLAR("pillar", 5f, EssencePillarEntity::summon),
     LANCE("lance", 8f, EssenceLanceEntity::summon),
     RETRACT("retract", 0f, EssenceMove::retract),
     RETRACT_ALL("retract_all", 0f, EssenceMove::retractAll),
-    SHOVEL("shovel", 2.5f, EssenceShovelItem::summon),
-    SWORD("sword", 2.5f, EssenceSwordItem::summon),
+    SHOVEL("shovel", 3f, EssenceShovelItem::summon),
+    SWORD("sword", 7f, EssenceSwordItem::summon),
     SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon);
 
     @Getter
