@@ -51,7 +51,7 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
     @Override
     public void tick() {
         final EssenceLanceEntity origin = getOrigin();
-        if (origin != null && (!origin.isAlive() || origin.isRemoved())) {
+        if (!level().isClientSide() && (origin == null || !origin.isAlive() || origin.isRemoved())) {
             discard();
         }
         super.tick();

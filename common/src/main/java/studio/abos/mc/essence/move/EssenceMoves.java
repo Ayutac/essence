@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 public enum EssenceMoves implements EssenceMove {
 
     BALL("ball", 1f, EssenceBallEntity::summonAndShoot),
+    DISSIPATE("dissipate", 0f, EssenceMove::dissipate),
     PILLAR("pillar", 5f, EssencePillarEntity::summon),
     LANCE("lance", 8f, EssenceLanceEntity::summon),
     SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon);
@@ -31,6 +32,9 @@ public enum EssenceMoves implements EssenceMove {
 
     EssenceMoves(final @NonNull String path, final float neededWillpower, final @NonNull Consumer<LivingEntity> performance) {
         id = Essence.id(path);
+        if (neededWillpower < 0f) {
+            throw new IllegalArgumentException("Willpower must be non-negative!");
+        }
         this.neededWillpower = neededWillpower;
         this.performance = performance;
     }
