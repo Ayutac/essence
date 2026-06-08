@@ -17,7 +17,7 @@ public class EssenceShovelItem extends ShovelItem implements EssenceItem {
     }
 
     public static void summon(final LivingEntity user) {
-        if (user == null || !user.getActiveItem().isEmpty() || user.isSpectator() || !EssenceAttachment.of(user).attemptMove(EssenceMoves.AXE, user)) {
+        if (user == null || !user.getActiveItem().isEmpty() || user.isSpectator() || !EssenceAttachment.of(user).attemptMove(EssenceMoves.SHOVEL, user)) {
             return;
         }
         final ItemStack shovel = new ItemStack(ModItems.ESSENCE_SHOVEL.asItem());

@@ -13,6 +13,7 @@ import studio.abos.mc.essence.entity.EssenceSpikeSphereEntity;
 import studio.abos.mc.essence.item.EssenceAxeItem;
 import studio.abos.mc.essence.item.EssenceHoeItem;
 import studio.abos.mc.essence.item.EssencePickaxeItem;
+import studio.abos.mc.essence.item.EssenceShearsItem;
 import studio.abos.mc.essence.item.EssenceShovelItem;
 import studio.abos.mc.essence.item.EssenceSwordItem;
 
@@ -30,6 +31,7 @@ public enum EssenceMoves implements EssenceMove {
     LANCE("lance", 8f, EssenceLanceEntity::summon),
     RETRACT("retract", 0f, EssenceMove::retract),
     RETRACT_ALL("retract_all", 0f, EssenceMove::retractAll),
+    SHEARS("shears", 5f, EssenceShearsItem::summon),
     SHOVEL("shovel", 3f, EssenceShovelItem::summon),
     SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon),
     SWORD("sword", 7f, EssenceSwordItem::summon);

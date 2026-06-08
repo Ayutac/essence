@@ -17,7 +17,7 @@ public class EssenceHoeItem extends HoeItem implements EssenceItem {
     }
 
     public static void summon(final LivingEntity user) {
-        if (user == null || !user.getActiveItem().isEmpty() || user.isSpectator() || !EssenceAttachment.of(user).attemptMove(EssenceMoves.AXE, user)) {
+        if (user == null || !user.getActiveItem().isEmpty() || user.isSpectator() || !EssenceAttachment.of(user).attemptMove(EssenceMoves.HOE, user)) {
             return;
         }
         final ItemStack hoe = new ItemStack(ModItems.ESSENCE_HOE.asItem());

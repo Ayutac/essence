@@ -17,7 +17,7 @@ public class EssencePickaxeItem extends Item implements EssenceItem {
     }
 
     public static void summon(final LivingEntity user) {
-        if (user == null || !user.getActiveItem().isEmpty() || user.isSpectator() || !EssenceAttachment.of(user).attemptMove(EssenceMoves.AXE, user)) {
+        if (user == null || !user.getActiveItem().isEmpty() || user.isSpectator() || !EssenceAttachment.of(user).attemptMove(EssenceMoves.PICKAXE, user)) {
             return;
         }
         final ItemStack pickaxe = new ItemStack(ModItems.ESSENCE_PICKAXE.asItem());

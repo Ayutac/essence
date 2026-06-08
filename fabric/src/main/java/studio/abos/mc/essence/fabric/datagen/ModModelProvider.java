@@ -24,6 +24,7 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.generateFlatItem(ModItems.ESSENCE_AXE.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.ESSENCE_HOE.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.ESSENCE_PICKAXE.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.ESSENCE_SHEARS.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.ESSENCE_SHOVEL.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.ESSENCE_SWORD.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
     }

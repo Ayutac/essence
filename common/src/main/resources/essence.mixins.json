@@ -13,7 +13,8 @@
     "ItemStackMixin",
     "LivingEntityMixin",
     "ServerLevelMixin",
-    "ServerPlayerGameModeMixin"
+    "ServerPlayerGameModeMixin",
+    "SheepMixin"
   ],
   "client": [
   ],
