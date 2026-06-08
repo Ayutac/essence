@@ -77,6 +77,8 @@ public class EssenceAttachment {
         Pair<EssenceMove, DiscardMove> previous = null;
         while (!activeMoves.isEmpty()) { // dangerous
             if (activeMoves.getFirst() == previous) {
+                // we make sure to remove moves where the discarding failed to remove it
+                // especially useful for disappearing Essence items
                 activeMoves.removeFirst();
             }
             else {
