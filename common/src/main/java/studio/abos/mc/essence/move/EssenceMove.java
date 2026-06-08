@@ -1,21 +1,33 @@
 package studio.abos.mc.essence.move;
 
 import com.mojang.datafixers.util.Pair;
-import lombok.NonNull;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import studio.abos.mc.essence.Essence;
 import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.entity.EssenceEntity;
 import studio.abos.mc.essence.entity.SegmentedEssence;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public interface EssenceMove {
+
+    AttributeModifier SPEED_MODIFIER_FEET = new AttributeModifier(
+            Essence.id("essence_feet"), 1.5f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+    );
+    AttributeModifier JUMP_MODIFIER_FEET = new AttributeModifier(
+            Essence.id("essence_feet"), 0.2f, AttributeModifier.Operation.ADD_VALUE
+    );
+    AttributeModifier STEP_MODIFIER_FEET = new AttributeModifier(
+            Essence.id("essence_feet"), 1f, AttributeModifier.Operation.ADD_VALUE
+    );
 
     Identifier getId();
 
@@ -65,31 +77,33 @@ public interface EssenceMove {
         }
     }
 
-    private static @NonNull DiscardMove discard(final @NonNull EssenceMove move) {
-        return u -> {
-            final EssenceAttachment essence = EssenceAttachment.of(u);
-            final var m = essence.getActiveMoves().stream()
-                    .filter(pair -> pair.getFirst() == move)
-                    .findFirst();
-            m.ifPresent(pair -> essence.getActiveMoves().remove(pair));
-        };
-    }
-
-    private static Consumer<LivingEntity> activateEffect(final @NonNull EssenceMove move) {
-        return user -> {
-            if (user == null) {
-                return;
-            }
-            final EssenceAttachment essence = EssenceAttachment.of(user);
-            if (essence.moveActive(move) || !essence.attemptMove(move, user)) {
-                return;
-            }
-            essence.getActiveMoves().add(Pair.of(move, discard(move)));
-        };
-    }
-
     static void feet(final LivingEntity user) {
-        activateEffect(EssenceMoves.FEET).accept(user);
+        if (user == null) {
+            return;
+        }
+        final EssenceAttachment essence = EssenceAttachment.of(user);
+        if (essence.moveActive(EssenceMoves.FEET) || !essence.attemptMove(EssenceMoves.FEET, user)) {
+            return;
+        }
+        essence.getActiveMoves().add(Pair.of(EssenceMoves.FEET, u -> {
+            final EssenceAttachment e = EssenceAttachment.of(u);
+            final var m = e.getActiveMoves().stream()
+                    .filter(pair -> pair.getFirst() == EssenceMoves.FEET)
+                    .findFirst();
+            m.ifPresent(pair -> e.getActiveMoves().remove(pair));
+            final AttributeInstance speed = user.getAttribute(Attributes.MOVEMENT_SPEED);
+            speed.removeModifier(SPEED_MODIFIER_FEET);
+            final AttributeInstance jump = user.getAttribute(Attributes.JUMP_STRENGTH);
+            jump.removeModifier(JUMP_MODIFIER_FEET);
+            final AttributeInstance step = user.getAttribute(Attributes.STEP_HEIGHT);
+            step.removeModifier(STEP_MODIFIER_FEET);
+        }));
+        final AttributeInstance speed = user.getAttribute(Attributes.MOVEMENT_SPEED);
+        speed.addTransientModifier(SPEED_MODIFIER_FEET);
+        final AttributeInstance jump = user.getAttribute(Attributes.JUMP_STRENGTH);
+        jump.addTransientModifier(JUMP_MODIFIER_FEET);
+        final AttributeInstance step = user.getAttribute(Attributes.STEP_HEIGHT);
+        step.addTransientModifier(STEP_MODIFIER_FEET);
     }
 
 }
