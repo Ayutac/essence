@@ -15,6 +15,7 @@ public class ModItems {
     public static DeferredItem ESSENCE_HOE;
     public static DeferredItem ESSENCE_PICKAXE;
     public static DeferredItem ESSENCE_SHEARS;
+    public static DeferredItem ESSENCE_SHIELD;
     public static DeferredItem ESSENCE_SHOVEL;
     public static DeferredItem ESSENCE_SWORD;
 
@@ -23,6 +24,7 @@ public class ModItems {
         ESSENCE_HOE = items.register("essence_hoe", EssenceHoeItem::new).asDeferredItem();
         ESSENCE_PICKAXE = items.register("essence_pickaxe", EssencePickaxeItem::new).asDeferredItem();
         ESSENCE_SHEARS = items.register("essence_shears", EssenceShearsItem::new).asDeferredItem();
+        ESSENCE_SHIELD = items.register("essence_shield", EssenceShieldItem::new).asDeferredItem();
         ESSENCE_SHOVEL = items.register("essence_shovel", EssenceShovelItem::new).asDeferredItem();
         ESSENCE_SWORD = items.register("essence_sword", EssenceSwordItem::new).asDeferredItem();
     }
