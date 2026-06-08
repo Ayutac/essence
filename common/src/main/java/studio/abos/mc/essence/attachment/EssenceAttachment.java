@@ -74,8 +74,15 @@ public class EssenceAttachment {
     }
 
     public void dissipateAll(final LivingEntity user) {
+        Pair<EssenceMove, DiscardMove> previous = null;
         while (!activeMoves.isEmpty()) { // dangerous
-            activeMoves.getFirst().getSecond().discard(user);
+            if (activeMoves.getFirst() == previous) {
+                activeMoves.removeFirst();
+            }
+            else {
+                previous = activeMoves.getFirst();
+                activeMoves.getFirst().getSecond().discard(user);
+            }
         }
     }
 
