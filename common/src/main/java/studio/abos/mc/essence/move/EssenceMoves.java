@@ -27,6 +27,7 @@ public enum EssenceMoves implements EssenceMove {
     BALL("ball", 1f, EssenceBallEntity::summonAndShoot),
     BRIDGE("bridge", 10f, EssenceBridgeEntity::summon),
     DISSIPATE("dissipate", 0f, EssenceMove::dissipate),
+    FEET("feet", 8f, EssenceMove::feet),
     HOE("hoe", 4f, EssenceHoeItem::summon),
     PICKAXE("pickaxe", 6f, EssencePickaxeItem::summon),
     PILLAR("pillar", 5f, EssencePillarEntity::summon),

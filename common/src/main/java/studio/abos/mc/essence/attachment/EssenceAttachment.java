@@ -79,6 +79,12 @@ public class EssenceAttachment {
         }
     }
 
+    public boolean moveActive(final @NonNull EssenceMove move) {
+        return activeMoves.stream()
+                .map(Pair::getFirst)
+                .anyMatch(move::equals);
+    }
+
     public static EssenceAttachment of(@NonNull LivingEntity living) {
         final EssenceAttachment essence = ModDataAttachments.ESSENCE.getOrCreate(living);
         if (living instanceof ServerPlayer player) {
@@ -94,7 +100,7 @@ public class EssenceAttachment {
         }
     }
 
-    public static float calculateWillpower(ServerPlayer player) {
+    public static float calculateWillpower(final @NonNull ServerPlayer player) {
         int blocksMined = 0;
         for (Stat<@NonNull Block> blockStat : Stats.BLOCK_MINED) {
             blocksMined += player.getStats().getValue(blockStat);

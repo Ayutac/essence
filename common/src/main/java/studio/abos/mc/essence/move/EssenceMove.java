@@ -1,6 +1,7 @@
 package studio.abos.mc.essence.move;
 
 import com.mojang.datafixers.util.Pair;
+import lombok.NonNull;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -12,6 +13,7 @@ import studio.abos.mc.essence.entity.SegmentedEssence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface EssenceMove {
 
@@ -61,6 +63,33 @@ public interface EssenceMove {
                 entry.getSecond().discard(user);
             }
         }
+    }
+
+    private static @NonNull DiscardMove discard(final @NonNull EssenceMove move) {
+        return u -> {
+            final EssenceAttachment essence = EssenceAttachment.of(u);
+            final var m = essence.getActiveMoves().stream()
+                    .filter(pair -> pair.getFirst() == move)
+                    .findFirst();
+            m.ifPresent(pair -> essence.getActiveMoves().remove(pair));
+        };
+    }
+
+    private static Consumer<LivingEntity> activateEffect(final @NonNull EssenceMove move) {
+        return user -> {
+            if (user == null) {
+                return;
+            }
+            final EssenceAttachment essence = EssenceAttachment.of(user);
+            if (essence.moveActive(move) || !essence.attemptMove(move, user)) {
+                return;
+            }
+            essence.getActiveMoves().add(Pair.of(move, discard(move)));
+        };
+    }
+
+    static void feet(final LivingEntity user) {
+        activateEffect(EssenceMoves.FEET).accept(user);
     }
 
 }
