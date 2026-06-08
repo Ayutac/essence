@@ -11,6 +11,7 @@ import studio.abos.mc.essence.entity.EssenceLanceEntity;
 import studio.abos.mc.essence.entity.EssencePillarEntity;
 import studio.abos.mc.essence.entity.EssenceSpikeSphereEntity;
 import studio.abos.mc.essence.item.EssenceAxeItem;
+import studio.abos.mc.essence.item.EssenceHoeItem;
 import studio.abos.mc.essence.item.EssencePickaxeItem;
 import studio.abos.mc.essence.item.EssenceShovelItem;
 import studio.abos.mc.essence.item.EssenceSwordItem;
@@ -23,6 +24,7 @@ public enum EssenceMoves implements EssenceMove {
     BALL("ball", 1f, EssenceBallEntity::summonAndShoot),
     BRIDGE("bridge", 10f, EssenceBridgeEntity::summon),
     DISSIPATE("dissipate", 0f, EssenceMove::dissipate),
+    HOE("hoe", 4f, EssenceHoeItem::summon),
     PICKAXE("pickaxe", 6f, EssencePickaxeItem::summon),
     PILLAR("pillar", 5f, EssencePillarEntity::summon),
     LANCE("lance", 8f, EssenceLanceEntity::summon),
