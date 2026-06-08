@@ -16,6 +16,7 @@ import studio.abos.mc.essence.item.EssencePickaxeItem;
 import studio.abos.mc.essence.item.EssenceShearsItem;
 import studio.abos.mc.essence.item.EssenceShieldItem;
 import studio.abos.mc.essence.item.EssenceShovelItem;
+import studio.abos.mc.essence.item.EssenceSpearItem;
 import studio.abos.mc.essence.item.EssenceSwordItem;
 
 import java.util.function.Consumer;
@@ -35,6 +36,7 @@ public enum EssenceMoves implements EssenceMove {
     SHEARS("shears", 5f, EssenceShearsItem::summon),
     SHIELD("shield", 3f, EssenceShieldItem::summon),
     SHOVEL("shovel", 3f, EssenceShovelItem::summon),
+    SPEAR("spear", 6f, EssenceSpearItem::summon),
     SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon),
     SWORD("sword", 7f, EssenceSwordItem::summon);
 

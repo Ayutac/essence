@@ -17,6 +17,7 @@ public class ModItems {
     public static DeferredItem ESSENCE_SHEARS;
     public static DeferredItem ESSENCE_SHIELD;
     public static DeferredItem ESSENCE_SHOVEL;
+    public static DeferredItem ESSENCE_SPEAR;
     public static DeferredItem ESSENCE_SWORD;
 
     public static void initialize(final BalmItemRegistrar items) {
@@ -26,6 +27,7 @@ public class ModItems {
         ESSENCE_SHEARS = items.register("essence_shears", EssenceShearsItem::new).asDeferredItem();
         ESSENCE_SHIELD = items.register("essence_shield", EssenceShieldItem::new).asDeferredItem();
         ESSENCE_SHOVEL = items.register("essence_shovel", EssenceShovelItem::new).asDeferredItem();
+        ESSENCE_SPEAR = items.register("essence_spear", EssenceSpearItem::new).asDeferredItem();
         ESSENCE_SWORD = items.register("essence_sword", EssenceSwordItem::new).asDeferredItem();
     }
 
