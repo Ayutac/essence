@@ -16,6 +16,7 @@ public class ModEntities {
     public static Holder<@NotNull EntityType<@NotNull EssenceBridgeEntity>> ESSENCE_BRIDGE;
     public static Holder<@NotNull EntityType<@NotNull EssencePillarEntity>> ESSENCE_PILLAR;
     public static Holder<@NotNull EntityType<@NotNull EssenceLanceEntity>> ESSENCE_LANCE;
+    public static Holder<@NotNull EntityType<@NotNull EssenceSpikeEntity>> ESSENCE_SPIKE;
     public static Holder<@NotNull EntityType<@NotNull EssenceSpikeSphereEntity>> ESSENCE_SPIKE_SPHERE;
 
     public static void initialize(BalmEntityTypeRegistrar entities) {
@@ -33,6 +34,10 @@ public class ModEntities {
                         .eyeHeight(0.25f)).asHolder();
         ESSENCE_LANCE = entities.register("essence_lance", () ->
                 EntityType.Builder.of(new WorldOnlyEntityFactory<>(EssenceLanceEntity::new), MobCategory.MISC)
+                        .sized(0.5f, 0.5f)
+                        .eyeHeight(0.25f)).asHolder();
+        ESSENCE_SPIKE = entities.register("essence_spike", () ->
+                EntityType.Builder.of(new WorldOnlyEntityFactory<>(EssenceSpikeEntity::new), MobCategory.MISC)
                         .sized(0.5f, 0.5f)
                         .eyeHeight(0.25f)).asHolder();
         ESSENCE_SPIKE_SPHERE = entities.register("essence_spike_sphere", () ->

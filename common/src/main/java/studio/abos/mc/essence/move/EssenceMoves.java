@@ -9,6 +9,7 @@ import studio.abos.mc.essence.entity.EssenceBallEntity;
 import studio.abos.mc.essence.entity.EssenceBridgeEntity;
 import studio.abos.mc.essence.entity.EssenceLanceEntity;
 import studio.abos.mc.essence.entity.EssencePillarEntity;
+import studio.abos.mc.essence.entity.EssenceSpikeEntity;
 import studio.abos.mc.essence.entity.EssenceSpikeSphereEntity;
 import studio.abos.mc.essence.item.EssenceAxeItem;
 import studio.abos.mc.essence.item.EssenceHoeItem;
@@ -39,6 +40,7 @@ public enum EssenceMoves implements EssenceMove {
     SHIELD("shield", 3f, EssenceShieldItem::summon),
     SHOVEL("shovel", 3f, EssenceShovelItem::summon),
     SPEAR("spear", 6f, EssenceSpearItem::summon),
+    SPIKE("spike", 3f, EssenceSpikeEntity::summonAndShoot),
     SPIKE_SPHERE("spike_sphere", 20f, EssenceSpikeSphereEntity::summon),
     SWORD("sword", 7f, EssenceSwordItem::summon);
 
