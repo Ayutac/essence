@@ -96,6 +96,13 @@ public class EssenceAttachment {
                 .anyMatch(move::equals);
     }
 
+    public void removeFirst(final @NonNull EssenceMove move) {
+        final var m = activeMoves.stream()
+                .filter(pair -> pair.getFirst() == move)
+                .findFirst();
+        m.ifPresent(pair -> activeMoves.remove(pair));
+    }
+
     public static EssenceAttachment of(@NonNull LivingEntity living) {
         final EssenceAttachment essence = ModDataAttachments.ESSENCE.getOrCreate(living);
         if (living instanceof ServerPlayer player) {

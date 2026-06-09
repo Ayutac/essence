@@ -83,15 +83,16 @@ public interface EssenceMove {
             return;
         }
         final EssenceAttachment essence = EssenceAttachment.of(user);
-        if (essence.moveActive(EssenceMoves.FEET) || !essence.attemptMove(EssenceMoves.FEET, user)) {
+        if (essence.moveActive(EssenceMoves.FEET)) {
+            return;
+        }
+        essence.removeFirst(EssenceMoves.LEGS);
+        if (!essence.attemptMove(EssenceMoves.FEET, user)) {
             return;
         }
         essence.getActiveMoves().add(Pair.of(EssenceMoves.FEET, u -> {
             final EssenceAttachment e = EssenceAttachment.of(u);
-            final var m = e.getActiveMoves().stream()
-                    .filter(pair -> pair.getFirst() == EssenceMoves.FEET)
-                    .findFirst();
-            m.ifPresent(pair -> e.getActiveMoves().remove(pair));
+            e.removeFirst(EssenceMoves.FEET);
             final AttributeInstance speed = user.getAttribute(Attributes.MOVEMENT_SPEED);
             speed.removeModifier(SPEED_MODIFIER_FEET);
             final AttributeInstance jump = user.getAttribute(Attributes.JUMP_STRENGTH);
@@ -112,7 +113,11 @@ public interface EssenceMove {
             return;
         }
         final EssenceAttachment essence = EssenceAttachment.of(user);
-        if (essence.moveActive(EssenceMoves.LEGS) || !essence.attemptMove(EssenceMoves.LEGS, user)) {
+        if (essence.moveActive(EssenceMoves.LEGS)) {
+            return;
+        }
+        essence.removeFirst(EssenceMoves.FEET);
+        if (!essence.attemptMove(EssenceMoves.LEGS, user)) {
             return;
         }
         essence.getActiveMoves().add(Pair.of(EssenceMoves.LEGS, u -> {
