@@ -32,6 +32,7 @@ public enum EssenceMoves implements EssenceMove {
     PICKAXE("pickaxe", 6f, EssencePickaxeItem::summon),
     PILLAR("pillar", 5f, EssencePillarEntity::summon),
     LANCE("lance", 8f, EssenceLanceEntity::summon),
+    LEGS("legs", 50f, EssenceMove::legs),
     RETRACT("retract", 0f, EssenceMove::retract),
     RETRACT_ALL("retract_all", 0f, EssenceMove::retractAll),
     SHEARS("shears", 5f, EssenceShearsItem::summon),

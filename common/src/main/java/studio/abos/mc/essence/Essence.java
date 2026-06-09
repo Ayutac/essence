@@ -3,6 +3,7 @@ package studio.abos.mc.essence;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.core.BalmRegistrars;
 import net.blay09.mods.balm.platform.event.callback.ServerPlayerCallback;
+import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,7 @@ public class Essence {
         Balm.commands().register(EssenceMoveCommand::register);
         ModDamageTypes.initialize();
         ServerPlayerCallback.Leave.EVENT.register(EssenceAttachment::dissipate);
+        ServerTickCallback.AFTER.register(EssenceAttachment::tick);
     }
 
 }

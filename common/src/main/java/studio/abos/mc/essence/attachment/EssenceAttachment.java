@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
@@ -14,6 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import studio.abos.mc.essence.move.DiscardMove;
 import studio.abos.mc.essence.move.EssenceMove;
+import studio.abos.mc.essence.move.EssenceMoves;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -122,4 +124,13 @@ public class EssenceAttachment {
         return blocksMined / 1_000f + metersTravelled / 1_000f + itemsCrafted / 6_400f;
     }
 
+    public static void tick(final MinecraftServer server) {
+        for (final ServerPlayer player : server.getPlayerList().getPlayers()) {
+            final EssenceAttachment essence = ModDataAttachments.ESSENCE.get(player);
+            if (essence != null && essence.moveActive(EssenceMoves.LEGS)) {
+                player.getAbilities().flying = true;
+                player.onUpdateAbilities();
+            }
+        }
+    }
 }

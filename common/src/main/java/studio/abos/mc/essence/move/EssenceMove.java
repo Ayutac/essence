@@ -2,6 +2,7 @@ package studio.abos.mc.essence.move;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -104,6 +105,31 @@ public interface EssenceMove {
         jump.addTransientModifier(JUMP_MODIFIER_FEET);
         final AttributeInstance step = user.getAttribute(Attributes.STEP_HEIGHT);
         step.addTransientModifier(STEP_MODIFIER_FEET);
+    }
+
+    static void legs(final LivingEntity user) {
+        if (user == null) {
+            return;
+        }
+        final EssenceAttachment essence = EssenceAttachment.of(user);
+        if (essence.moveActive(EssenceMoves.LEGS) || !essence.attemptMove(EssenceMoves.LEGS, user)) {
+            return;
+        }
+        essence.getActiveMoves().add(Pair.of(EssenceMoves.LEGS, u -> {
+            final EssenceAttachment e = EssenceAttachment.of(u);
+            final var m = e.getActiveMoves().stream()
+                    .filter(pair -> pair.getFirst() == EssenceMoves.LEGS)
+                    .findFirst();
+            m.ifPresent(pair -> e.getActiveMoves().remove(pair));
+            if (u instanceof ServerPlayer player && !(player.isCreative() || player.isSpectator())) {
+                player.getAbilities().flying = false;
+                player.onUpdateAbilities();
+            }
+        }));
+        if (user instanceof ServerPlayer player) {
+            player.getAbilities().flying = true;
+            player.onUpdateAbilities();
+        }
     }
 
 }
