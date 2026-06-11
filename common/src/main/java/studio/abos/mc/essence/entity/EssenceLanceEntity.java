@@ -34,7 +34,7 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
         super(ModEntities.ESSENCE_LANCE.value(), level);
     }
 
-    public void setOrigin(final EssenceLanceEntity origin) {
+    public void setOrigin(final EssenceEntity origin) {
         this.origin = EntityReference.of(origin);
     }
 

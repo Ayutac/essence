@@ -4,6 +4,7 @@ import lombok.NonNull;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import studio.abos.mc.essence.entity.EssenceEntity;
+import studio.abos.mc.essence.entity.SegmentedEssence;
 import studio.abos.mc.essence.move.EssenceContext;
 
 import java.util.function.Function;
@@ -17,6 +18,9 @@ public record SummonEntityKeyframe<T extends EssenceEntity>(Function<Level, T> c
         entity.setYRot(user.getYHeadRot());
         entity.setXRot(user.getXRot());
         entity.setPos(position.calculate(user));
+        if (entity instanceof SegmentedEssence segment) {
+            segment.setOrigin(entity);
+        }
         user.level().addFreshEntity(entity);
         return entity;
     }

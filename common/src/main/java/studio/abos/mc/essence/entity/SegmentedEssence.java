@@ -4,4 +4,6 @@ public interface SegmentedEssence {
 
     EssenceEntity getOrigin();
 
+    void setOrigin(EssenceEntity origin);
+
 }

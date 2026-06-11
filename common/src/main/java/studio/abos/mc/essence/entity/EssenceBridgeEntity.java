@@ -25,7 +25,7 @@ public class EssenceBridgeEntity extends EssenceEntity implements SegmentedEssen
         super(ModEntities.ESSENCE_BRIDGE.value(), level);
     }
 
-    public void setOrigin(final EssenceBridgeEntity origin) {
+    public void setOrigin(final EssenceEntity origin) {
         this.origin = EntityReference.of(origin);
     }
 
