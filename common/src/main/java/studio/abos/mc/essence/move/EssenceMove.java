@@ -1,140 +1,67 @@
 package studio.abos.mc.essence.move;
 
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
+import lombok.Getter;
+import lombok.NonNull;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
-import studio.abos.mc.essence.Essence;
 import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.entity.EssenceEntity;
-import studio.abos.mc.essence.entity.SegmentedEssence;
+import studio.abos.mc.essence.keyframe.Keyframe;
 
-import java.util.ArrayList;
-import java.util.List;
+public class EssenceMove {
 
-public interface EssenceMove {
+    @Getter
+    @NonNull
+    protected final EssenceMoveType moveType;
+    @Getter
+    @NonNull
+    protected final LivingEntity user;
+    @Getter
+    protected EssenceContext context;
+    @Getter
+    protected final boolean endMoveOnContextRemoval;
+    @Getter
+    protected int tickCount;
 
-    AttributeModifier SPEED_MODIFIER_FEET = new AttributeModifier(
-            Essence.id("essence_feet"), 1.5f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
-    );
-    AttributeModifier JUMP_MODIFIER_FEET = new AttributeModifier(
-            Essence.id("essence_feet"), 0.2f, AttributeModifier.Operation.ADD_VALUE
-    );
-    AttributeModifier STEP_MODIFIER_FEET = new AttributeModifier(
-            Essence.id("essence_feet"), 1f, AttributeModifier.Operation.ADD_VALUE
-    );
-
-    Identifier getId();
-
-    float getNeededWillpower();
-
-    void perform(LivingEntity user);
-
-    static EntityHitResult getOwnedEssenceInLineOfSight(final LivingEntity user) {
-        final Vec3 start = user.getEyePosition();
-        return ProjectileUtil.getEntityHitResult(user, start,
-                start.add(user.getLookAngle().scale(EssenceEntity.EFFECTIVE_RANGE)),
-                user.getBoundingBox().inflate(EssenceEntity.EFFECTIVE_RANGE_SQR),
-                entity -> entity instanceof EssenceEntity essence
-                        && essence.getOwner() == user,
-                EssenceEntity.EFFECTIVE_RANGE_SQR
-        );
+    public EssenceMove(final @NonNull EssenceMoveType moveType, final @NonNull LivingEntity user, final boolean endMoveOnContextRemoval) {
+        this.moveType = moveType;
+        this.user = user;
+        this.endMoveOnContextRemoval = endMoveOnContextRemoval;
     }
 
-    static void dissipate(final LivingEntity user) {
-        final EntityHitResult lookedAtEssence = getOwnedEssenceInLineOfSight(user);
-        if (lookedAtEssence != null) {
-            if (lookedAtEssence.getEntity() instanceof SegmentedEssence part && part.getOrigin() != null) {
-                part.getOrigin().discard();
-            }
-            else {
-                lookedAtEssence.getEntity().discard();
-            }
+    public void setContext(final EssenceContext context) {
+        if (context instanceof EssenceEntity entity) {
+            this.context = entity;
         }
     }
 
-    static void retract(final LivingEntity user) {
-        final EntityHitResult lookedAtEssence = getOwnedEssenceInLineOfSight(user);
-        if (lookedAtEssence != null) {
-            ((EssenceEntity)lookedAtEssence.getEntity()).retract();
+    public void incrementTickCount() {
+        tickCount++;
+    }
+
+    public boolean initMove() {
+        final EssenceAttachment essence = EssenceAttachment.of(getUser());
+        if (!essence.attemptMove(getMoveType())) {
+            return false;
+        }
+        return essence.getActiveMoves().add(this);
+    }
+
+    public void tickMove() {
+        final Keyframe keyframe = getMoveType().getKeyframeMap().get(getTickCount());
+        if (keyframe != null) {
+            setContext(keyframe.run(getUser(), getContext()));
+        }
+        incrementTickCount();
+        if (endMoveOnContextRemoval && context != null && context.isContextRemoved()) {
+            endMove();
         }
     }
 
-    static void retractAll(final LivingEntity user) {
-        final List<Pair<EssenceMove, DiscardMove>> moves = new ArrayList<>(EssenceAttachment.of(user).getActiveMoves());
-        for (final var entry : moves) {
-            if (entry.getSecond() instanceof EssenceEntity entity) {
-                entity.retract();
-            }
-            else {
-                entry.getSecond().discard(user);
-            }
+    public boolean endMove() {
+        if (getContext() != null && !getContext().isContextRemoved()) {
+            getContext().removeContext(getUser());
         }
-    }
-
-    static void feet(final LivingEntity user) {
-        if (user == null) {
-            return;
-        }
-        final EssenceAttachment essence = EssenceAttachment.of(user);
-        if (essence.moveActive(EssenceMoves.FEET)) {
-            return;
-        }
-        essence.removeFirst(EssenceMoves.LEGS);
-        if (!essence.attemptMove(EssenceMoves.FEET, user)) {
-            return;
-        }
-        essence.getActiveMoves().add(Pair.of(EssenceMoves.FEET, u -> {
-            final EssenceAttachment e = EssenceAttachment.of(u);
-            e.removeFirst(EssenceMoves.FEET);
-            final AttributeInstance speed = user.getAttribute(Attributes.MOVEMENT_SPEED);
-            speed.removeModifier(SPEED_MODIFIER_FEET);
-            final AttributeInstance jump = user.getAttribute(Attributes.JUMP_STRENGTH);
-            jump.removeModifier(JUMP_MODIFIER_FEET);
-            final AttributeInstance step = user.getAttribute(Attributes.STEP_HEIGHT);
-            step.removeModifier(STEP_MODIFIER_FEET);
-        }));
-        final AttributeInstance speed = user.getAttribute(Attributes.MOVEMENT_SPEED);
-        speed.addTransientModifier(SPEED_MODIFIER_FEET);
-        final AttributeInstance jump = user.getAttribute(Attributes.JUMP_STRENGTH);
-        jump.addTransientModifier(JUMP_MODIFIER_FEET);
-        final AttributeInstance step = user.getAttribute(Attributes.STEP_HEIGHT);
-        step.addTransientModifier(STEP_MODIFIER_FEET);
-    }
-
-    static void legs(final LivingEntity user) {
-        if (user == null) {
-            return;
-        }
-        final EssenceAttachment essence = EssenceAttachment.of(user);
-        if (essence.moveActive(EssenceMoves.LEGS)) {
-            return;
-        }
-        essence.removeFirst(EssenceMoves.FEET);
-        if (!essence.attemptMove(EssenceMoves.LEGS, user)) {
-            return;
-        }
-        essence.getActiveMoves().add(Pair.of(EssenceMoves.LEGS, u -> {
-            final EssenceAttachment e = EssenceAttachment.of(u);
-            final var m = e.getActiveMoves().stream()
-                    .filter(pair -> pair.getFirst() == EssenceMoves.LEGS)
-                    .findFirst();
-            m.ifPresent(pair -> e.getActiveMoves().remove(pair));
-            if (u instanceof ServerPlayer player && !(player.isCreative() || player.isSpectator())) {
-                player.getAbilities().flying = false;
-                player.onUpdateAbilities();
-            }
-        }));
-        if (user instanceof ServerPlayer player) {
-            player.getAbilities().flying = true;
-            player.onUpdateAbilities();
-        }
+        return EssenceAttachment.of(getUser()).getActiveMoves().remove(this);
     }
 
 }

@@ -1,8 +1,6 @@
 package studio.abos.mc.essence.entity;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +14,7 @@ import net.minecraft.world.phys.Vec3;
 import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.damage.ModDamageTypes;
 import studio.abos.mc.essence.move.EssenceMove;
-import studio.abos.mc.essence.move.EssenceMoves;
+import studio.abos.mc.essence.move.EssenceMoveTypes;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,11 +25,6 @@ public class EssenceSpikeEntity extends EssenceEntity {
 
     public EssenceSpikeEntity(final Level level) {
         super(ModEntities.ESSENCE_SPIKE.value(), level);
-    }
-
-    @Override
-    public EssenceMove getMoveType() {
-        return EssenceMoves.SPIKE;
     }
 
     @Override
@@ -92,36 +85,21 @@ public class EssenceSpikeEntity extends EssenceEntity {
     }
 
     @Override
-    public void retract() {
+    public void retract(float speed) {
         final Vec3 position = position();
         final LivingEntity owner = getOwner();
         final EssenceBallEntity ball = new EssenceBallEntity(level());
         if (owner != null) {
             ball.setOwner(owner);
-            EssenceAttachment.of(owner).getActiveMoves().add(Pair.of(EssenceMoves.BALL, ball));
+            final EssenceMove move = new EssenceMove(EssenceMoveTypes.BALL, owner, true);
+            move.setContext(ball);
+            move.incrementTickCount();
+            EssenceAttachment.of(owner).getActiveMoves().add(move);
         }
         ball.setPos(position);
         level().addFreshEntity(ball);
-        ball.retract();
+        ball.retract(speed);
         discard();
     }
 
-    public static void summonAndShoot(final LivingEntity user) {
-        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.SPIKE, user)) {
-            return;
-        }
-        final Level level = user.level();
-        final EssenceSpikeEntity spike = new EssenceSpikeEntity(level);
-        spike.setOwner(user);
-        EssenceAttachment.of(user).getActiveMoves().add(Pair.of(EssenceMoves.SPIKE, spike));
-        spike.setRot(user.getYHeadRot(), user.getXRot());
-        final double yRad = Math.toRadians(spike.getYRot());
-        final double xRad = Math.toRadians(spike.getXRot());
-        final float xd = -Mth.sin(yRad) * Mth.cos(xRad);
-        final float yd = -Mth.sin(xRad);
-        final float zd = Mth.cos(yRad) * Mth.cos(xRad);
-        spike.setPos(user.getEyePosition().add(xd, yd, zd));
-        spike.setDeltaMovement(2 * xd, 2 * yd, 2 * zd);
-        level.addFreshEntity(spike);
-    }
 }

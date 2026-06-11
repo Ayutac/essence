@@ -1,6 +1,5 @@
 package studio.abos.mc.essence.entity;
 
-import com.mojang.datafixers.util.Pair;
 import lombok.NonNull;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntitySelector;
@@ -10,7 +9,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.move.EssenceMove;
-import studio.abos.mc.essence.move.EssenceMoves;
+import studio.abos.mc.essence.move.EssenceMoveTypes;
 
 public class EssencePillarEntity extends EssenceEntity {
 
@@ -18,11 +17,6 @@ public class EssencePillarEntity extends EssenceEntity {
 
     public EssencePillarEntity(final Level level) {
         super(ModEntities.ESSENCE_PILLAR.value(), level);
-    }
-
-    @Override
-    public EssenceMove getMoveType() {
-        return EssenceMoves.PILLAR;
     }
 
     @NonNull
@@ -42,31 +36,21 @@ public class EssencePillarEntity extends EssenceEntity {
     }
 
     @Override
-    public void retract() {
+    public void retract(float speed) {
         final Vec3 position = position();
         final LivingEntity owner = getOwner();
         final EssenceBallEntity ball = new EssenceBallEntity(level());
         if (owner != null) {
             ball.setOwner(owner);
-            EssenceAttachment.of(owner).getActiveMoves().add(Pair.of(EssenceMoves.BALL, ball));
+            final EssenceMove move = new EssenceMove(EssenceMoveTypes.BALL, owner, true);
+            move.setContext(ball);
+            move.incrementTickCount();
+            EssenceAttachment.of(owner).getActiveMoves().add(move);
         }
         ball.setPos(position);
         level().addFreshEntity(ball);
-        ball.retract();
+        ball.retract(speed);
         discard();
-    }
-
-    public static void summon(final LivingEntity user) {
-        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.PILLAR, user)) {
-            return;
-        }
-        final Level level = user.level();
-        final EssencePillarEntity pillar = new EssencePillarEntity(level);
-        pillar.setOwner(user);
-        EssenceAttachment.of(user).getActiveMoves().add(Pair.of(EssenceMoves.PILLAR, pillar));
-        pillar.setPos(user.position());
-        pillar.setYRot(user.getYRot());
-        level.addFreshEntity(pillar);
     }
 
 }

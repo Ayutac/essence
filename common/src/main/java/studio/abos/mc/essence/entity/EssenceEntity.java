@@ -1,6 +1,5 @@
 package studio.abos.mc.essence.entity;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -11,15 +10,16 @@ import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TraceableEntity;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
-import studio.abos.mc.essence.attachment.EssenceAttachment;
-import studio.abos.mc.essence.move.DiscardMove;
-import studio.abos.mc.essence.move.EssenceMove;
+import studio.abos.mc.essence.move.EssenceContext;
 
-public abstract class EssenceEntity extends Entity implements TraceableEntity, DiscardMove {
+public abstract class EssenceEntity extends Entity implements TraceableEntity, EssenceContext {
 
     public static final int EFFECTIVE_RANGE = 64;
     public static final int EFFECTIVE_RANGE_SQR = EFFECTIVE_RANGE * EFFECTIVE_RANGE;
@@ -53,24 +53,16 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity, D
         return (LivingEntity)EntityReference.getEntity(owner, level());
     }
 
-    public abstract EssenceMove getMoveType();
-
-    public abstract void retract();
+    public abstract void retract(float speed);
 
     @Override
-    public void discard(final LivingEntity user) {
-        if (user == getOwner()) {
-            discard();
-        }
+    public void removeContext(final @NonNull LivingEntity user) {
+        discard();
     }
 
     @Override
-    public void remove(final @NonNull RemovalReason reason) {
-        final LivingEntity owner = getOwner();
-        if (owner != null) {
-            EssenceAttachment.of(owner).getActiveMoves().remove(Pair.of(getMoveType(), this));
-        }
-        super.remove(reason);
+    public boolean isContextRemoved() {
+        return isRemoved();
     }
 
     public boolean canHitEntity(final Entity entity) {
@@ -118,4 +110,16 @@ public abstract class EssenceEntity extends Entity implements TraceableEntity, D
         EntityReference.store(owner, output, "Owner");
         output.store("TickCount", Codec.INT, tickCount);
     }
+
+    public static EntityHitResult getOwnedEssenceInLineOfSight(final LivingEntity user) {
+        final Vec3 start = user.getEyePosition();
+        return ProjectileUtil.getEntityHitResult(user, start,
+                start.add(user.getLookAngle().scale(EssenceEntity.EFFECTIVE_RANGE)),
+                user.getBoundingBox().inflate(EssenceEntity.EFFECTIVE_RANGE_SQR),
+                entity -> entity instanceof EssenceEntity essence
+                        && essence.getOwner() == user,
+                EssenceEntity.EFFECTIVE_RANGE_SQR
+        );
+    }
+
 }

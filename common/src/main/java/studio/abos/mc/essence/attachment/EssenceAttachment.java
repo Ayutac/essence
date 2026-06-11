@@ -1,21 +1,22 @@
 package studio.abos.mc.essence.attachment;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import studio.abos.mc.essence.move.DiscardMove;
 import studio.abos.mc.essence.move.EssenceMove;
-import studio.abos.mc.essence.move.EssenceMoves;
+import studio.abos.mc.essence.move.EssenceMoveType;
+import studio.abos.mc.essence.move.EssenceMoveTypes;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class EssenceAttachment {
     private float willpower;
     private float willpowerBonus;
 
-    private List<Pair<EssenceMove, DiscardMove>> activeMoves = new LinkedList<>();
+    private List<EssenceMove> activeMoves = new LinkedList<>();
 
     public EssenceAttachment(final float blue, final float red, final float yellow, final float purple, final float green, final float orange, final float willpower, final float willpowerBonus) {
         this.blue = blue;
@@ -62,21 +63,21 @@ public class EssenceAttachment {
         return blue + red + yellow + purple + green + orange;
     }
 
-    public boolean attemptMove(final EssenceMove move, final LivingEntity user) {
+    public boolean attemptMove(final EssenceMoveType move) {
         float usedWillpower = (float)activeMoves.stream()
-                .map(Pair::getFirst)
-                .mapToDouble(EssenceMove::getNeededWillpower)
+                .map(EssenceMove::getMoveType)
+                .mapToDouble(EssenceMoveType::getNeededWillpower)
                 .sum();
         while (willpower - usedWillpower < move.getNeededWillpower() && !activeMoves.isEmpty()) {
-            final Pair<EssenceMove, DiscardMove> nextMoveToVanish = activeMoves.getFirst();
-            nextMoveToVanish.getSecond().discard(user); // also removes from the list of active moves
-            usedWillpower -= nextMoveToVanish.getFirst().getNeededWillpower();
+            final EssenceMove nextMoveToVanish = activeMoves.getFirst();
+            nextMoveToVanish.endMove(); // also removes from the list of active moves
+            usedWillpower -= nextMoveToVanish.getMoveType().getNeededWillpower();
         }
         return willpower - usedWillpower >= move.getNeededWillpower();
     }
 
-    public void dissipateAll(final LivingEntity user) {
-        Pair<EssenceMove, DiscardMove> previous = null;
+    public void dissipateAll() {
+        EssenceMove previous = null;
         while (!activeMoves.isEmpty()) { // dangerous
             if (activeMoves.getFirst() == previous) {
                 // we make sure to remove moves where the discarding failed to remove it
@@ -85,22 +86,22 @@ public class EssenceAttachment {
             }
             else {
                 previous = activeMoves.getFirst();
-                activeMoves.getFirst().getSecond().discard(user);
+                activeMoves.getFirst().endMove();
             }
         }
     }
 
-    public boolean moveActive(final @NonNull EssenceMove move) {
+    public boolean moveActive(final @NonNull EssenceMoveType move) {
         return activeMoves.stream()
-                .map(Pair::getFirst)
+                .map(EssenceMove::getMoveType)
                 .anyMatch(move::equals);
     }
 
-    public void removeFirst(final @NonNull EssenceMove move) {
-        final var m = activeMoves.stream()
-                .filter(pair -> pair.getFirst() == move)
+    public void removeFirst(final @NonNull EssenceMoveType move) {
+        final var firstMove = activeMoves.stream()
+                .filter(m -> m.getMoveType().equals(move))
                 .findFirst();
-        m.ifPresent(pair -> activeMoves.remove(pair));
+        firstMove.ifPresent(m -> activeMoves.remove(m));
     }
 
     public static EssenceAttachment of(@NonNull LivingEntity living) {
@@ -114,7 +115,7 @@ public class EssenceAttachment {
     public static void dissipate(@NonNull LivingEntity living) {
         final EssenceAttachment essence = ModDataAttachments.ESSENCE.get(living);
         if (essence != null) {
-            essence.dissipateAll(living);
+            essence.dissipateAll();
         }
     }
 
@@ -132,11 +133,27 @@ public class EssenceAttachment {
     }
 
     public static void tick(final MinecraftServer server) {
+        // tick essence keyframes
+        for (final ServerLevel level : server.getAllLevels()) {
+            for (final Entity entity : level.getAllEntities()) {
+                if (entity instanceof final LivingEntity living) {
+                    final EssenceAttachment essence = ModDataAttachments.ESSENCE.get(living);
+                    if (essence != null) {
+                        for (final EssenceMove move : essence.activeMoves) {
+                            move.tickMove();
+                        }
+                    }
+                }
+            }
+        }
+        // tick player-exclusive essence stuff
         for (final ServerPlayer player : server.getPlayerList().getPlayers()) {
             final EssenceAttachment essence = ModDataAttachments.ESSENCE.get(player);
-            if (essence != null && essence.moveActive(EssenceMoves.LEGS)) {
-                player.getAbilities().flying = true;
-                player.onUpdateAbilities();
+            if (essence != null) {
+                if (essence.moveActive(EssenceMoveTypes.LEGS)) {
+                    player.getAbilities().flying = true;
+                    player.onUpdateAbilities();
+                }
             }
         }
     }

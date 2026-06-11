@@ -1,6 +1,5 @@
 package studio.abos.mc.essence.entity;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import lombok.NonNull;
 import net.minecraft.server.level.ServerLevel;
@@ -20,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.damage.ModDamageTypes;
 import studio.abos.mc.essence.move.EssenceMove;
-import studio.abos.mc.essence.move.EssenceMoves;
+import studio.abos.mc.essence.move.EssenceMoveTypes;
 
 import java.util.Collection;
 
@@ -33,11 +32,6 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
 
     public EssenceLanceEntity(final Level level) {
         super(ModEntities.ESSENCE_LANCE.value(), level);
-    }
-
-    @Override
-    public EssenceMove getMoveType() {
-        return EssenceMoves.LANCE;
     }
 
     public void setOrigin(final EssenceLanceEntity origin) {
@@ -104,17 +98,20 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
     }
 
     @Override
-    public void retract() {
+    public void retract(float speed) {
         final Vec3 position = position();
         final LivingEntity owner = getOwner();
         final EssenceBallEntity ball = new EssenceBallEntity(level());
         if (owner != null) {
             ball.setOwner(owner);
-            EssenceAttachment.of(owner).getActiveMoves().add(Pair.of(EssenceMoves.BALL, ball));
+            final EssenceMove move = new EssenceMove(EssenceMoveTypes.BALL, owner, true);
+            move.setContext(ball);
+            move.incrementTickCount();
+            EssenceAttachment.of(owner).getActiveMoves().add(move);
         }
         ball.setPos(position);
         level().addFreshEntity(ball);
-        ball.retract();
+        ball.retract(speed);
         final EssenceLanceEntity origin = getOrigin();
         if (origin != null && this != origin) {
             origin.discard();
@@ -138,22 +135,4 @@ public class EssenceLanceEntity extends EssenceEntity implements SegmentedEssenc
         EntityReference.store(origin, output, "Origin");
     }
 
-    public static void summon(final LivingEntity user) {
-        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.LANCE, user)) {
-            return;
-        }
-        final Level level = user.level();
-        final EssenceLanceEntity lance = new EssenceLanceEntity(level);
-        lance.setOwner(user);
-        EssenceAttachment.of(user).getActiveMoves().add(Pair.of(EssenceMoves.LANCE, lance));
-        lance.setOrigin(lance);
-        lance.setRot(user.getYRot(), user.getXRot());
-        final double yRad = Math.toRadians(lance.getYRot());
-        final double xRad = Math.toRadians(lance.getXRot());
-        final float xd = -Mth.sin(yRad) * Mth.cos(xRad);
-        final float yd = -Mth.sin(xRad);
-        final float zd = Mth.cos(yRad) * Mth.cos(xRad);
-        lance.setPos(user.getEyePosition().add(xd, yd, zd));
-        level.addFreshEntity(lance);
-    }
 }

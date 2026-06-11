@@ -1,6 +1,5 @@
 package studio.abos.mc.essence.entity;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -11,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 import studio.abos.mc.essence.attachment.EssenceAttachment;
 import studio.abos.mc.essence.damage.ModDamageTypes;
 import studio.abos.mc.essence.move.EssenceMove;
-import studio.abos.mc.essence.move.EssenceMoves;
+import studio.abos.mc.essence.move.EssenceMoveTypes;
 
 import java.util.Collection;
 
@@ -19,27 +18,25 @@ public class EssenceSpikeSphereEntity extends EssenceEntity {
 
     public static final int SPIKES_TICK = 5;
 
-    protected EssenceSpikeSphereEntity(final Level level) {
+    public EssenceSpikeSphereEntity(final Level level) {
         super(ModEntities.ESSENCE_SPIKE_SPHERE.value(), level);
     }
 
     @Override
-    public EssenceMove getMoveType() {
-        return EssenceMoves.SPIKE_SPHERE;
-    }
-
-    @Override
-    public void retract() {
+    public void retract(float speed) {
         final Vec3 position = position();
         final LivingEntity owner = getOwner();
         final EssenceBallEntity ball = new EssenceBallEntity(level());
         if (owner != null) {
             ball.setOwner(owner);
-            EssenceAttachment.of(owner).getActiveMoves().add(Pair.of(EssenceMoves.BALL, ball));
+            final EssenceMove move = new EssenceMove(EssenceMoveTypes.BALL, owner, true);
+            move.setContext(ball);
+            move.incrementTickCount();
+            EssenceAttachment.of(owner).getActiveMoves().add(move);
         }
         ball.setPos(position);
         level().addFreshEntity(ball);
-        ball.retract();
+        ball.retract(speed);
         discard();
     }
 
@@ -76,19 +73,6 @@ public class EssenceSpikeSphereEntity extends EssenceEntity {
             entity.hurtServer((ServerLevel)level(),
                     new DamageSource(ModDamageTypes.essence(level()), getOwner()), 8f);
         }
-    }
-
-    public static void summon(final LivingEntity user) {
-        if (user == null || !EssenceAttachment.of(user).attemptMove(EssenceMoves.SPIKE_SPHERE, user)) {
-            return;
-        }
-        final Level level = user.level();
-        final EssenceSpikeSphereEntity spikeSphere = new EssenceSpikeSphereEntity(level);
-        spikeSphere.setOwner(user);
-        EssenceAttachment.of(user).getActiveMoves().add(Pair.of(EssenceMoves.SPIKE_SPHERE, spikeSphere));
-        spikeSphere.setPos(user.position());
-        spikeSphere.setYRot(user.getYRot());
-        level.addFreshEntity(spikeSphere);
     }
 
 }

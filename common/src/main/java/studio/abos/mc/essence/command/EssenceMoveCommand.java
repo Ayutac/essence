@@ -7,7 +7,7 @@ import lombok.experimental.UtilityClass;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
-import studio.abos.mc.essence.move.EssenceMove;
+import studio.abos.mc.essence.move.EssenceMoveType;
 
 @UtilityClass
 public class EssenceMoveCommand {
@@ -26,7 +26,7 @@ public class EssenceMoveCommand {
             return 0;
         }
 
-        final EssenceMove move = context.getArgument("move", EssenceMove.class);
+        final EssenceMoveType move = context.getArgument("move", EssenceMoveType.class);
         move.perform(player);
 
         return 1;
