@@ -64,4 +64,13 @@ public class EssenceMove {
         return EssenceAttachment.of(getUser()).getActiveMoves().remove(this);
     }
 
+    @Override
+    public String toString() {
+        return "EssenceMove{" +
+                "moveType=" + moveType +
+                ", user=" + user +
+                ", endMoveOnContextRemoval=" + endMoveOnContextRemoval +
+                '}';
+    }
+
 }
