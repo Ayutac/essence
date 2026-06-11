@@ -52,7 +52,7 @@ public class EssenceMove {
             setContext(keyframe.run(getUser(), getContext()));
         }
         incrementTickCount();
-        if (endMoveOnContextRemoval && context != null && context.isContextRemoved()) {
+        if (endMoveOnContextRemoval && (context == null || context.isContextRemoved())) {
             endMove();
         }
     }

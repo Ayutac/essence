@@ -15,6 +15,8 @@ import java.util.function.Function;
 
 public interface Keyframe {
 
+    Keyframe FORGET_CONTEXT = (_, _) -> null;
+
     EssenceContext run(final @NonNull LivingEntity user, final EssenceContext context);
 
     @NonNull
@@ -45,7 +47,7 @@ public interface Keyframe {
 
     @NonNull
     static Int2ObjectMap<Keyframe> retract(final float speed) {
-        return new Int2ObjectArrayMap<>(Map.of(0, new RetractEntityKeyframe(speed)));
+        return new Int2ObjectArrayMap<>(Map.of(0, new KeyframeGroup(new RetractEntityKeyframe(speed), Keyframe.FORGET_CONTEXT)));
     }
 
 }
